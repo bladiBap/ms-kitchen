@@ -1,0 +1,75 @@
+services:
+  ms_kitchen_db:
+    image: postgres:15
+    container_name: ms_kitchen_db
+    environment:
+      - POSTGRES_DB=${MS_KITCHEN_DB_NAME}
+      - POSTGRES_USER=${MS_KITCHEN_DB_USER}
+      - POSTGRES_PASSWORD=${MS_KITCHEN_DB_PASSWORD}
+    ports:
+      - "5030:5432"
+    volumes:
+      - postgres-data-kitchen:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${MS_KITCHEN_DB_USER} -d ${MS_KITCHEN_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env
+
+  ms_kitchen_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    logging:
+      driver: "json-file"
+      options:
+        tag: "{{.Name}}"
+    container_name: ms_kitchen_api
+    environment:
+      - MS_KITCHEN_DB_HOST=${MS_KITCHEN_DB_HOST}
+      - MS_KITCHEN_DB_PORT=${MS_KITCHEN_DB_PORT}
+      - MS_KITCHEN_DB_USER=${MS_KITCHEN_DB_USER}
+      - MS_KITCHEN_DB_PASSWORD=${MS_KITCHEN_DB_PASSWORD}
+      - MS_KITCHEN_DB_NAME=${MS_KITCHEN_DB_NAME}
+      - RABBITMQ_HOST=${RABBITMQ_HOST}
+      - RABBITMQ_USERNAME=${RABBITMQ_USERNAME}
+      - RABBITMQ_PASSWORD=${RABBITMQ_PASSWORD}
+      - RABBITMQ_VIRTUAL_HOST=${RABBITMQ_VIRTUAL_HOST}
+      - TZ=America/La_Paz
+    env_file:
+      - .env
+    ports:
+      - "5031:3000"
+    volumes:
+      - code-kitchen:/src
+    depends_on:
+      ms_kitchen_db:
+        condition: service_healthy
+
+  loki:
+    image: grafana/loki:2.9.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    user: root
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./promtail-config.yaml:/etc/promtail/config.yaml
+    command: -config.file=/etc/promtail/config.yaml
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+volumes:
+  postgres-data-kitchen:
+  code-kitchen:

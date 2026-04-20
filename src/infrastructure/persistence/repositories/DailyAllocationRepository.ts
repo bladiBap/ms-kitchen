@@ -1,0 +1,87 @@
+import 'reflect-metadata';
+import { inject, injectable } from 'tsyringe';
+import { DateUtils } from '@shared/utils/Date';
+import { Pagination } from '@core/model/Pagination';
+import { IEntityManagerProvider, IEntityManagerProviderToken } from '@core/interfaces/IEntityManagerProvider';
+
+import { DailyAllocation } from '@domain/daily-allocation/entities/DailyAllocation';
+import { AllocationLine } from '@domain/daily-allocation/entities/AllocationLine';
+import { IDailyAllocationRepository } from '@domain/daily-allocation/repositories/IDailyAllocationRepository';
+
+import { AllocationLineMapper } from '@infrastructure/persistence/mappers/AllocationLineMapper';
+import { DailyAllocationMapper } from '@infrastructure/persistence/mappers/DailyAllocationMapper';
+import { DailyAllocationEntity } from '@infrastructure/persistence/entities/DailyAllocation';
+import { AllocationLineEntity } from '@infrastructure/persistence/entities/AllocationLine';
+
+@injectable()
+export class DailyAllocationRepository implements IDailyAllocationRepository {
+	constructor(
+		@inject(IEntityManagerProviderToken) private readonly emProvider: IEntityManagerProvider,
+	) {}
+
+	async update(entity: DailyAllocation): Promise<DailyAllocation> {
+		const manager = this.emProvider.getManager();
+		const repository = manager.getRepository(DailyAllocationEntity);
+		const persistenceEntity = DailyAllocationMapper.toPersistence(entity);
+		const saved = await repository.save(persistenceEntity);
+		return DailyAllocationMapper.toDomain(saved);
+	}
+
+	async delete(id: string): Promise<void> {
+		const manager = this.emProvider.getManager();
+		const repository = manager.getRepository(DailyAllocationEntity);
+		const existing = await repository.findOne({ where: { id } });
+		if (!existing) {
+			return;
+		}
+		await repository.remove(existing);
+	}
+	getAll(paginacion: Pagination): Promise<DailyAllocation[]> {
+		throw new Error('Method not implemented.' + paginacion);
+	}
+
+	async findByDate(date: Date): Promise<DailyAllocation> {
+		console.log(`Finding daily allocation for date: ${date}`);
+		throw new Error('Method not implemented.');
+	}
+	async getById(id: string): Promise<DailyAllocation | null> {
+		console.log(`Fetching daily allocation with id: ${id}`);
+		throw new Error('Method not implemented.');
+	}
+
+	async create(entity: DailyAllocation): Promise<DailyAllocation> {
+		const manager = this.emProvider.getManager();
+		const persistenceEntity = DailyAllocationMapper.toPersistence(entity);
+		await manager.getRepository(DailyAllocationEntity).save(persistenceEntity);
+		return DailyAllocationMapper.toDomain(persistenceEntity);
+	}
+
+	async getDailyAllocation(clientId: string, date: Date): Promise<DailyAllocation | null> {
+
+		const formattedDate = DateUtils.formatDate(date);
+
+		const manager = this.emProvider.getManager();
+
+		const dailyAllocationEntity = await manager.getRepository(DailyAllocationEntity).findOne({
+			where: {
+				date: formattedDate,
+				lines: {
+					clientId: clientId
+				}
+			},
+			relations: ['lines'],
+		});
+
+		if (!dailyAllocationEntity) {
+			return null;
+		}
+		return DailyAllocationMapper.toDomain(dailyAllocationEntity);
+	}
+
+	async updatedLines(lines: AllocationLine[]): Promise<void> {
+		const allocationLineEntities = lines.map(line => AllocationLineMapper.toPersistence(line));
+		const manager = this.emProvider.getManager();
+		await manager.getRepository(AllocationLineEntity).save(allocationLineEntities);
+		return;
+	}
+}

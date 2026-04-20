@@ -1,0 +1,51 @@
+{
+    "compilerOptions": {
+
+        "target": "ESNext",
+        "lib": ["ES2022"],
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "moduleDetection": "force",
+        "resolveJsonModule": true,
+
+        "rootDir": "src",
+        "outDir": "dist",
+        "noEmit": true,
+        "sourceMap": true,
+        "declaration": true,
+
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "verbatimModuleSyntax": false,
+
+        "baseUrl": "./src",
+        "paths": {
+			"@core/*": ["_core/*"],
+			"@shared/*": ["_shared/*"],
+            "@domain/*": ["domain/*"],
+            "@application/*": ["application/*"],
+            "@infrastructure/*": ["infrastructure/*"],
+            "@presentation/*": ["presentation/*"],
+            "@common/*": ["common/*"],
+            "@utils/*": ["common/utils/*"],
+            "@test/*": ["test/*"],
+            "@outbox/*": ["outbox/*"],
+            "@comunication/*": ["comunication/*"],
+            "@/*": ["*"]
+        },
+
+        "strict": true,
+        "noImplicitAny": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "skipLibCheck": true,
+
+        "allowImportingTsExtensions": false
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"]
+}

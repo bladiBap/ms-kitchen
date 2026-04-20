@@ -1,0 +1,8 @@
+Dockerfile
+assets
+node_modules
+.dockerignore
+.env
+.git
+.vscode
+.DS_Store
