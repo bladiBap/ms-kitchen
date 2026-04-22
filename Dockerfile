@@ -20,4 +20,4 @@ EXPOSE 3000
 HEALTHCHECK --interval=30s CMD curl http://localhost:3000/hello-world || exit 1
 
 WORKDIR /app/dist
-CMD ["node", "index.js"]
+CMD ["node", "app.js"]

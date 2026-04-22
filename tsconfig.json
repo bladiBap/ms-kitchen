@@ -29,7 +29,7 @@
             "@domain/*": ["domain/*"],
             "@application/*": ["application/*"],
             "@infrastructure/*": ["infrastructure/*"],
-            "@presentation/*": ["presentation/*"],
+            "@api/*": ["api/*"],
             "@common/*": ["common/*"],
             "@utils/*": ["common/utils/*"],
             "@test/*": ["test/*"],

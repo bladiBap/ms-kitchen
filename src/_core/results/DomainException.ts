@@ -4,7 +4,7 @@ export class DomainException extends Error {
 	private exception: Exception;
 
 	constructor(exception: Exception) {
-		super(exception.mensaje);
+		super(exception.message);
 		this.exception = exception;
 	}
 

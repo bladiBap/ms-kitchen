@@ -7,7 +7,7 @@ import { DomainEvent } from '@core/abstraction/DomainEvent';
 import { IUnitOfWork } from '@core/interfaces/IUnitOfWork';
 
 import { DomainEventsCollector } from '@application/DomainEventsCollector';
-import { AppDataSourceToken } from '@infrastructure/persistence/data-source/DataSource';
+import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 @injectable()
 export class UnitOfWork implements IUnitOfWork {

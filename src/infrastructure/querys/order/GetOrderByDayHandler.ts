@@ -9,7 +9,7 @@ import { GetOrderByDay } from '@application/order/queries/GetOrderByDayQuery';
 import { OrderDTOMapper } from '@application/order/queries/mappers/OrderDTOMapper';
 
 import { OrderEntity } from '@infrastructure/persistence/entities/Order';
-import { AppDataSourceToken } from '@infrastructure/persistence/data-source/DataSource';
+import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 @injectable()
 export class GetOrderByDayHandler implements  IRequestHandler<GetOrderByDay, ResultWithValue<OrderDTO>> {

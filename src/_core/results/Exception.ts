@@ -4,14 +4,14 @@ export class Exception {
 	static readonly None = new Exception('', '', ExceptionType.Failure);
 	static readonly NullValue = new Exception('General.Null', 'Null value was provided', ExceptionType.Failure);
 
-	readonly codigo: string;
-	readonly mensaje: string;
-	readonly tipo: ExceptionType;
+	readonly code: string;
+	readonly message: string;
+	readonly type: ExceptionType;
 
 	protected constructor(code: string, structuredMessage: string, type: ExceptionType) {
-		this.mensaje = structuredMessage ?? '';
-		this.codigo = code;
-		this.tipo = type;
+		this.message = structuredMessage ?? '';
+		this.code = code;
+		this.type = type;
 	}
 
 	static Failure(code: string, structuredMessage: string): Exception {

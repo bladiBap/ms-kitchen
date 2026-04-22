@@ -8,7 +8,7 @@ import { OrderDTOMapper } from '@application/order/queries/mappers/OrderDTOMappe
 import { GetOrderByIdQuery } from '@application/order/queries/GetOrderByIdQuery';
 
 import { OrderEntity } from '@infrastructure/persistence/entities/Order';
-import { AppDataSourceToken } from '@infrastructure/persistence/data-source/DataSource';
+import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 @injectable()
 export class GetOrderByIdHandler implements IRequestHandler<GetOrderByIdQuery, ResultWithValue<OrderDTO>> {

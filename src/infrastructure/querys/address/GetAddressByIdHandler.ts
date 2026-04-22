@@ -9,7 +9,7 @@ import { GetAddressByIdQuery } from '@application/address/query/GetAddressByIdQu
 import { AddressDTOMapper } from '@application/address/query/mappers/AddressMapper';
 
 import { AddressEntity } from '@infrastructure/persistence/entities/Address';
-import { AppDataSourceToken } from '@infrastructure/persistence/data-source/DataSource';
+import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 import { IRequestHandler } from '@core/interfaces/IRequestHandler';
 
 @injectable()

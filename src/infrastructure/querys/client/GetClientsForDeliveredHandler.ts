@@ -9,7 +9,7 @@ import { GetClientsForDeliveredQuery } from '@application/client/query/getClient
 import { ClientDeliveredDTOMapper } from '@application/client/query/getClientsForDelivery/ClientDeliveredDTOMapper';
 
 import { AddressEntity } from '@infrastructure/persistence/entities/Address';
-import { AppDataSourceToken } from '@infrastructure/persistence/data-source/DataSource';
+import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 @injectable()
 export class GetClientsForDeliveredHandler implements IRequestHandler<GetClientsForDeliveredQuery, ResultWithValue<IClientDeliveredDTO[]>> {

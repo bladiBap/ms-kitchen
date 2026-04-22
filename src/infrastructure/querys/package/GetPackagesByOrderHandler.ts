@@ -3,7 +3,7 @@ import { inject, injectable } from 'tsyringe';
 import { ResultWithValue } from '@core/results/Result';
 import { IRequestHandler } from '@core/interfaces/IRequestHandler';
 
-import { AppDataSourceToken } from '@infrastructure/persistence/data-source/DataSource';
+import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 import { GetPackagesByOrderQuery } from '@application/package/queries/getPackagesByOrderQuery/GetPackagesByOrderQuery';
 import { PackageDTO } from '@application/package/dto/PackageDTO';
 import { PackageEntity } from '@infrastructure/persistence/entities/Package';
