@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from 'uuid';
-import { OrderItemError } from '@domain/order/errors/OrderItemError';
-import { StatusOrder } from '@domain/order/types/StatusOrderEnum';
-
 import { Entity } from '@core/abstraction/Entity';
 import { DomainException } from '@core/results/DomainException';
+
+import { StatusOrder } from '@domain/order/types/StatusOrderEnum';
+import { OrderItemError } from '@domain/order/errors/OrderItemError';
 import { OrderItemCompletedEvent } from '@domain/order/events/OrderItemCompletedEvent';
 
 export class OrderItem extends Entity{
@@ -53,19 +53,19 @@ export class OrderItem extends Entity{
 		this.addDomainEvent(new OrderItemCompletedEvent(this.orderId));
 	}
 
-	public increaseQuantityPrepared(amount: number) : void {
+	public increaseQuantityPrepared(quantityToIncrement: number) : void {
 
 		if (this.quantityPlanned === this.quantityPrepared) {
 			return;
 		}
 
-		if (amount <= 0) {
-			throw new DomainException( OrderItemError.quantityMustBeGreaterThanZero(amount) );
+		if (quantityToIncrement <= 0) {
+			throw new DomainException(OrderItemError.quantityMustBeGreaterThanZero(quantityToIncrement));
 		}
 
-		const newQuantityPrepared = this.quantityPrepared + amount;
+		const newQuantityPrepared = this.quantityPrepared + quantityToIncrement;
 		if (newQuantityPrepared > this.quantityPlanned) {
-			throw new DomainException( OrderItemError.quantityPreparedExceedsPlanned(newQuantityPrepared, this.quantityPlanned) );
+			throw new DomainException(OrderItemError.quantityPreparedExceedsPlanned(newQuantityPrepared, this.quantityPlanned));
 		}
 
 		if (newQuantityPrepared === this.quantityPlanned) {

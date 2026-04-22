@@ -7,7 +7,7 @@ import { PackageError } from '@domain/package/errors/PackageError';
 import { PackageItem } from '@domain/package/entities/PackageItem';
 
 export class Package extends AggregateRoot {
-
+	private orderId: string;
 	private clientId: string;
 	private addressId: string;
 	private code: string;
@@ -15,13 +15,14 @@ export class Package extends AggregateRoot {
 	private datePackage: Date = new Date();
 	private listPackageItems: PackageItem[] = [];
 
-	constructor(id: string, code: string, statusPackage: StatusPackage, clientId: string, addressId: string, datePackage: Date, listPackageItems: PackageItem[] = []) {
+	constructor(id: string, orderId: string, code: string, statusPackage: StatusPackage, clientId: string, addressId: string, datePackage: Date, listPackageItems: PackageItem[] = []) {
 		super(id);
 
 		if (code.trim().length === 0) {
 			throw new DomainException( PackageError.codeIsRequired() );
 		}
 
+		this.orderId = orderId;
 		this.code = code;
 		this.statusPackage = statusPackage;
 		this.clientId = clientId;
@@ -30,24 +31,27 @@ export class Package extends AggregateRoot {
 		this.datePackage = datePackage;
 	}
 
-	public static createNew(code: string, statusPackage: StatusPackage, clientId: string, addressId: string, datePackage: Date, listPackageItems: PackageItem[] = []): Package {
-		return new Package(uuidv4(), code, statusPackage, clientId, addressId, datePackage, listPackageItems);
+	public static createNew(orderId: string, code: string, statusPackage: StatusPackage, clientId: string, addressId: string, datePackage: Date, listPackageItems: PackageItem[] = []): Package {
+		return new Package(uuidv4(), orderId, code, statusPackage, clientId, addressId, datePackage, listPackageItems);
 	}
 
 	public addPackageItem(packageItem: PackageItem): void {
-		if (this.statusPackage === StatusPackage.DELIVERED) {
+		if (this.statusPackage === StatusPackage.COMPLETED) {
 			throw new DomainException( PackageError.cannotAddItemToDeliveredPackage() );
 		}
 		this.listPackageItems.push(packageItem);
 	}
 
-	public changeToDelivered(): void {
-		if (this.statusPackage !== StatusPackage.PACKAGING) {
-			throw new DomainException( PackageError.canNotChangeStatus(this.statusPackage, StatusPackage.DELIVERED) );
+	public 	(): void {
+		if (this.statusPackage !== StatusPackage.CREATED) {
+			throw new DomainException( PackageError.canNotChangeStatus(this.statusPackage, StatusPackage.COMPLETED) );
 		}
-		this.statusPackage = StatusPackage.DELIVERED;
+		this.statusPackage = StatusPackage.COMPLETED;
 	}
 
+	public getOrderId(): string {
+		return this.orderId;
+	}
 
 	public getCode(): string {
 		return this.code;

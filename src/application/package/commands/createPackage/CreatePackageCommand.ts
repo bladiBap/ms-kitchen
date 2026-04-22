@@ -1,12 +1,13 @@
-import { IRequest } from '@common/Core/Abstractions/IResquest';
-import { IResult } from '@common/Core/Abstractions/IResult';
+import { Result } from '@core/results/Result';
+import { IRequest } from '@core/interfaces/IRequest';
 
-export class CreatePackageCommand implements IRequest<IResult> {
-	_result!: IResult;
+export class CreatePackageCommand implements IRequest<Result> {
+	data!: Result;
 	constructor(
-        public readonly clientId: number,
+		public readonly orderId: string,
+        public readonly clientId: string,
         public readonly date: Date,
-        public readonly recipeIds: number[]
+        public readonly recipeIds: string[]
 	) {}
 
 }

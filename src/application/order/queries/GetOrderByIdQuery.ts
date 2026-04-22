@@ -1,10 +1,10 @@
 import { OrderDTO } from '@application/order/dto/OrderDTO';
-import { IRequest } from '@common/Core/Abstractions/IResquest';
-import { IResultWithValue } from '@common/Core/Abstractions/IResult';
+import { IRequest } from '@core/interfaces/IRequest';
+import { ResultWithValue } from '@core/results/Result';
 
-export class GetOrderById implements IRequest<IResultWithValue<OrderDTO>> {
-	_result!: IResultWithValue<OrderDTO>;
+export class GetOrderByIdQuery implements IRequest<ResultWithValue<OrderDTO>> {
+	data!: ResultWithValue<OrderDTO>;
 
-	constructor(public readonly id: number) {
+	constructor(public readonly id: string) {
 	}
 }

@@ -1,8 +1,8 @@
-import { IRequest } from '@common/Core/Abstractions/IResquest';
-import { IResult } from '@common/Core/Abstractions/IResult';
+import { Result } from '@core/results/Result';
+import { IRequest } from '@core/interfaces/IRequest';
 
-export class IncreaseQuantityOrderItemCommand implements IRequest<IResult> {
-	_result!: IResult;
+export class IncreaseQuantityOrderItemCommand implements IRequest<Result> {
+	data!: Result;
 
-	constructor(public readonly orderItemId: number, public readonly quantity?: number) {}
+	constructor(public readonly orderItemId: string, public readonly quantity?: number) {}
 }

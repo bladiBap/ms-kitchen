@@ -1,9 +1,9 @@
-import { Address } from '@infrastructure/Persistence/PersistenceModel/Entities/Address';
-import { IClientDeliveredDTO } from '../../dto/dto';
+import { AddressEntity } from '@infrastructure/persistence/entities/Address';
+import { IClientDeliveredDTO } from '@application/client/dto/ClientToDelivered';
 
 export class ClientDeliveredDTOMapper {
 
-	static toDTO(addressByUser: Address[]): IClientDeliveredDTO[] {
+	static toDTO(addressByUser: AddressEntity[]): IClientDeliveredDTO[] {
 
 		const lista: IClientDeliveredDTO[] = addressByUser.map((item) => ({
 			clientName: item.calendar.mealPlan.client.name,

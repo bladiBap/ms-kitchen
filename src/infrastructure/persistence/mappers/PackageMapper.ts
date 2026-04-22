@@ -4,7 +4,7 @@ import { PackageEntity } from '@infrastructure/persistence/entities/Package';
 import { PackageItem } from '@domain/package/entities/PackageItem';
 import { PackageItemEntity } from '@infrastructure/persistence/entities/PackageItem';
 
-import { PackageItemMapper } from './PackageItemMapper';
+import { PackageItemMapper } from '@infrastructure/persistence/mappers/PackageItemMapper';
 
 export class PackageMapper {
 
@@ -27,6 +27,7 @@ export class PackageMapper {
 		packageEntity.datePackage = packaged.getDatePackage();
 		packageEntity.status = packaged.getStatusPackage();
 		packageEntity.code = packaged.getCode();
+		packageEntity.orderId = packaged.getOrderId();
 
 		return packageEntity;
 	}
@@ -47,6 +48,7 @@ export class PackageMapper {
 
 		return new Package(
 			data.id,
+			data.orderId,
 			data.code,
 			data.status,
 			data.clientId,

@@ -1,8 +1,9 @@
 export interface AddressDTO {
-    id: number;
+    id: string;
     date: string;
     reference: string;
     latitude: number;
     longitude: number;
-    calendarId: number;
+    calendarId: string;
+	needsDelivery: boolean;
 }

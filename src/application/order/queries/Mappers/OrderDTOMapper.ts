@@ -1,8 +1,8 @@
-import { Order } from '@infrastructure/Persistence/PersistenceModel/Entities/Order';
+import { OrderEntity } from '@infrastructure/persistence/entities/Order';
 import { OrderDTO } from '@application/order/dto/OrderDTO';
 
 export class OrderDTOMapper {
-	static toDTO(order: Order): OrderDTO {
+	static toDTO(order: OrderEntity): OrderDTO {
 		return {
 			id: order.id,
 			dateOrdered: new Date(order.dateOrdered).toISOString().split('T')[0]!,

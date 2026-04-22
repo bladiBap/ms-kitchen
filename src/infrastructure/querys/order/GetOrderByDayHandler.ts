@@ -1,0 +1,43 @@
+import { DataSource } from 'typeorm';
+import { inject, injectable } from 'tsyringe';
+import { DateUtils } from '@shared/utils/Date';
+import { ResultWithValue } from '@core/results/Result';
+import { IRequestHandler } from '@core/interfaces/IRequestHandler';
+
+import { OrderDTO } from '@application/order/dto/OrderDTO';
+import { GetOrderByDay } from '@application/order/queries/GetOrderByDayQuery';
+import { OrderDTOMapper } from '@application/order/queries/mappers/OrderDTOMapper';
+
+import { OrderEntity } from '@infrastructure/persistence/entities/Order';
+import { AppDataSourceToken } from '@infrastructure/persistence/data-source/DataSource';
+
+@injectable()
+export class GetOrderByDayHandler implements  IRequestHandler<GetOrderByDay, ResultWithValue<OrderDTO>> {
+
+	constructor(
+        @inject(AppDataSourceToken) private readonly dataSource: DataSource
+	) {}
+
+	async handle(query: GetOrderByDay): Promise< ResultWithValue<OrderDTO>> {
+
+		const orderTable = this.dataSource.getRepository(OrderEntity);
+		const date = DateUtils.formatDate(query.date);
+
+		const order = await orderTable.findOne({
+			where: { dateOrdered: date },
+			relations: [
+				'orderItems',
+				'orderItems.recipe',
+				'orderItems.recipe.ingredients',
+				'orderItems.recipe.ingredients.ingredient',
+				'orderItems.recipe.ingredients.ingredient.measurementUnit'
+			]
+		});
+
+		if (!order) {
+			return ResultWithValue.fromValue<OrderDTO>({} as OrderDTO);
+		}
+
+		return ResultWithValue.fromValue<OrderDTO>(OrderDTOMapper.toDTO(order));
+	}
+}

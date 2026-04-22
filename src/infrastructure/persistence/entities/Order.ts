@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { StatusOrder } from '@domain/order/types/StatusOrderEnum';
 
 import { OrderItemEntity } from './OrderItem';
+import { PackageEntity } from './Package';
 
 @Entity({
 	name: 'order'
@@ -25,4 +26,7 @@ export class OrderEntity {
 
     @OneToMany(() => OrderItemEntity, (orderItem) => orderItem.order, { cascade: true, eager: true })
     	orderItems!: OrderItemEntity[];
+
+	@OneToMany(() => PackageEntity, (packageEntity) => packageEntity.order)
+	packages!: PackageEntity[];
 }

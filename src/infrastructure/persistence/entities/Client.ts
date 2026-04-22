@@ -5,6 +5,7 @@ import {
 import { MealPlanEntity } from './MealPlan';
 import { PackageEntity } from './Package';
 import { AllocationLineEntity } from './AllocationLine';
+import { CalendarEntity } from './Calendar';
 
 @Entity({
 	name: 'client'
@@ -24,4 +25,7 @@ export class ClientEntity {
 
     @OneToMany(() => AllocationLineEntity, (allocationLine) => allocationLine.client)
     	allocationLines!: AllocationLineEntity[];
+
+	@OneToMany(() => CalendarEntity, (calendar) => calendar.client)
+	calendars!: CalendarEntity[];
 }

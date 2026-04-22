@@ -5,5 +5,5 @@ export interface IUnitOfWork {
 	start(): Promise<void>;
 	commit(): Promise<void>;
 	rollback(): Promise<void>;
-	getEntityManager(): EntityManager;
+	getManager(): EntityManager;
 }

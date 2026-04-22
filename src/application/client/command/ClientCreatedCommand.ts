@@ -1,9 +1,9 @@
-import { IRequest } from '@common/Core/Abstractions/IResquest';
-import { IResult } from '@common/Core/Abstractions/IResult';
+import { Result } from '@core/results/Result';
+import { IRequest } from '@core/interfaces/IRequest';
 
-export class ClientCreatedCommand implements IRequest<IResult> {
-	_result!: IResult;
+export class ClientCreatedCommand implements IRequest<Result> {
+	data!: Result;
 
-	constructor( public readonly id : number, public readonly name : string ) {
+	constructor( public readonly id : string, public readonly name : string ) {
 	}
 }

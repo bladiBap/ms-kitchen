@@ -1,12 +1,13 @@
 import 'reflect-metadata';
-import { DateUtils } from '@/Common/Utils/Date';
-import { IOrderRepository } from '@domain/Order/Repositories/IOrderRepository';
-import { Order } from '@domain/Order/Entities/Order';
-import { Order as OrderEntity } from '../PersistenceModel/Entities/Order';
-
-import { OrderMapper } from '../DomainModel/Config/OrderMapper';
 import { inject, injectable } from 'tsyringe';
+import { DateUtils } from '@shared/utils/Date';
 import { IEntityManagerProvider, IEntityManagerProviderToken } from '@core/interfaces/IEntityManagerProvider';
+
+import { Order } from '@domain/order/entities/Order';
+import { IOrderRepository } from '@domain/order/repositories/IOrderRepository';
+
+import { OrderEntity } from '@infrastructure/persistence/entities/Order';
+import { OrderMapper } from '@infrastructure/persistence/mappers/OrderMapper';
 
 @injectable()
 export class OrderRepository implements IOrderRepository {
@@ -14,8 +15,33 @@ export class OrderRepository implements IOrderRepository {
 	constructor(
         @inject(IEntityManagerProviderToken) private readonly emProvider: IEntityManagerProvider
 	) {}
+	async create(entity: Order): Promise<Order> {
+		const manager = this.emProvider.getManager();
+		const orderEntity = OrderMapper.toPersistence(entity);
+		const savedOrder = await manager.getRepository(OrderEntity).save(orderEntity);
+		return OrderMapper.toDomain(savedOrder);
+	}
 
-	async findByDateAsync(date: Date): Promise<Order | null> {
+	async update(entity: Order): Promise<Order> {
+		const manager = this.emProvider.getManager();
+		const orderEntity = OrderMapper.toPersistence(entity);
+		const savedOrder = await manager.getRepository(OrderEntity).save(orderEntity);
+		return OrderMapper.toDomain(savedOrder);
+	}
+
+	async getAll(): Promise<Order[]> {
+		const manager = this.emProvider.getManager();
+		const repository = manager.getRepository(OrderEntity);
+
+
+		const orders = await repository.find({
+			order: { dateOrdered: 'DESC' }
+		});
+
+		return orders.map(order => OrderMapper.toDomain(order));
+	}
+
+	async findByDate(date: Date): Promise<Order | null> {
 		const manager = this.emProvider.getManager();
 		const formattedDate = DateUtils.formatDate(date);
 
@@ -30,13 +56,13 @@ export class OrderRepository implements IOrderRepository {
 		return OrderMapper.toDomain(order);
 	}
 
-	async deleteAsync(id: number): Promise<void> {
+	async delete(id: string): Promise<void> {
 		const manager = this.emProvider.getManager();
 		await manager.getRepository(OrderEntity).delete(id);
 		return;
 	}
 
-	async getByIdAsync(id: number): Promise<Order | null> {
+	async getById(id: string): Promise<Order | null> {
 		const manager = this.emProvider.getManager();
 
 		const orderEntity = await manager.getRepository(OrderEntity).findOne({
@@ -47,8 +73,7 @@ export class OrderRepository implements IOrderRepository {
 		return OrderMapper.toDomain(orderEntity);
 	}
 
-	async getByIdTodayAsync(id: number, readOnly: boolean = false): Promise<Order | null> {
-		console.log(`Fetching order with id: ${id} (readOnly: ${readOnly})`);
+	async getByIdToday(id: string): Promise<Order | null> {
 		const manager = this.emProvider.getManager();
 		const today = DateUtils.formatDate(new Date());
 
@@ -58,18 +83,5 @@ export class OrderRepository implements IOrderRepository {
 
 		if (!orderEntity) {return null;}
 		return OrderMapper.toDomain(orderEntity);
-	}
-
-	async addAsync(entity: Order): Promise<void> {
-		const manager = this.emProvider.getManager();
-		const orderEntity = OrderMapper.toPersistence(entity);
-		await manager.getRepository(OrderEntity).save(orderEntity);
-	}
-
-	async updatedAsync(order: Order): Promise<Order> {
-		const manager = this.emProvider.getManager();
-		const orderEntity = OrderMapper.toPersistence(order);
-		await manager.getRepository(OrderEntity).save(orderEntity);
-		return order;
 	}
 }

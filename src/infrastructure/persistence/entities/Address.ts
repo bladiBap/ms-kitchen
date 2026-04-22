@@ -27,6 +27,9 @@ export class AddressEntity{
     @Column({ type: 'float' })
     	longitude!: number;
 
+	@Column({ default: true })
+	needsDelivery!: boolean;
+
     @ManyToOne(() => CalendarEntity, (calendar) => calendar.addresses)
     @JoinColumn({ name: 'calendarId' })
     	calendar!: CalendarEntity;

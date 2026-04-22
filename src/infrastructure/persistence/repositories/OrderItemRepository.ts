@@ -1,13 +1,15 @@
-import { IOrderItemRepository } from '@domain/Order/Repositories/IOrderItemRepository';
-import { OrderItem } from '../PersistenceModel/Entities/OrderItem';
-
-import { OrderItemMapper } from '../DomainModel/Config/OrderItemMapper';
-import { OrderItem as DomainOrderItem } from '@domain/Order/Entities/OrderItem';
-
-
-import { DomainEventsCollector } from '@application/DomainEventsCollector';
 import { inject, injectable } from 'tsyringe';
+
 import { IEntityManagerProvider, IEntityManagerProviderToken } from '@core/interfaces/IEntityManagerProvider';
+import { DomainEventsCollector } from '@application/DomainEventsCollector';
+
+import { OrderItem } from '@domain/order/entities/OrderItem';
+import { IOrderItemRepository } from '@domain/order/repositories/IOrderItemRepository';
+
+import { OrderItemMapper } from '@infrastructure/persistence/mappers/OrderItemMapper';
+import { OrderItemEntity } from '@infrastructure/persistence/entities/OrderItem';
+
+
 @injectable()
 export class OrderItemRepository implements IOrderItemRepository {
 
@@ -15,16 +17,39 @@ export class OrderItemRepository implements IOrderItemRepository {
         @inject(IEntityManagerProviderToken) private readonly emProvider: IEntityManagerProvider
 	) {}
 
-	async deleteAsync(id: number): Promise<void> {
+
+	async create(entity: OrderItem): Promise<OrderItem> {
 		const manager = this.emProvider.getManager();
-		await manager.getRepository(OrderItem).delete(id);
+		const itemEntity = OrderItemMapper.toPersistence(entity);
+		const entitySaved = await manager.getRepository(OrderItemEntity).save(itemEntity);
+		return OrderItemMapper.toDomain(entitySaved);
+	}
+	async update(entity: OrderItem): Promise<OrderItem> {
+		const manager = this.emProvider.getManager();
+		const itemEntity = OrderItemMapper.toPersistence(entity);
+		const updatedItem = await manager.getRepository(OrderItemEntity).save(itemEntity);
+		DomainEventsCollector.collect(entity.getDomainEvents());
+		return OrderItemMapper.toDomain(updatedItem);
+	}
+
+	async getAll(): Promise<OrderItem[]> {
+		const manager = this.emProvider.getManager();
+		const repository = manager.getRepository(OrderItemEntity);
+		const items = await repository.find({
+			relations: ['order']
+		});
+		return items.map((item) => OrderItemMapper.toDomain(item));
+	}
+
+	async delete(id: string): Promise<void> {
+		const manager = this.emProvider.getManager();
+		await manager.getRepository(OrderItemEntity).delete(id);
 		return;
 	}
 
-	async getByIdAsync(id: number, readOnly = true): Promise<DomainOrderItem | null> {
-		console.log(`Fetching order item with id: ${id} (readOnly: ${readOnly})`);
+	async getById(id: string): Promise<OrderItem | null> {
 		const manager = this.emProvider.getManager();
-		const item = await manager.getRepository(OrderItem).findOne({
+		const item = await manager.getRepository(OrderItemEntity).findOne({
 			where: { id },
 			relations: ['order'],
 		});
@@ -33,19 +58,5 @@ export class OrderItemRepository implements IOrderItemRepository {
 
 		const domainItem = OrderItemMapper.toDomain(item);
 		return domainItem;
-	}
-
-	async addAsync(entity: DomainOrderItem): Promise<void> {
-		const manager = this.emProvider.getManager();
-		const itemEntity = OrderItemMapper.toPersistence(entity);
-		await manager.getRepository(OrderItem).save(itemEntity);
-	}
-
-	async updateAsync(entity: DomainOrderItem): Promise<DomainOrderItem> {
-		const manager = this.emProvider.getManager();
-		const itemEntity = OrderItemMapper.toPersistence(entity);
-		const updatedItem = await manager.getRepository(OrderItem).save(itemEntity);
-		DomainEventsCollector.collect(entity.getDomainEvents());
-		return OrderItemMapper.toDomain(updatedItem);
 	}
 }

@@ -1,10 +1,9 @@
 import { inject, injectable } from 'tsyringe';
 
-import { Pagination } from '@core/model/Pagination';
 import { IEntityManagerProvider, IEntityManagerProviderToken } from '@core/interfaces/IEntityManagerProvider';
 
 import { Client } from '@domain/client/entities/Client';
-import { IClientRepository } from '@domain/Client/Repositories/IClientRepository';
+import { IClientRepository } from '@domain/client/repositories/IClientRepository';
 
 import { ClientMapper } from '@infrastructure/persistence/mappers/ClientMapper';
 import { ClientEntity } from '@infrastructure/persistence/entities/Client';
@@ -30,8 +29,8 @@ export class ClientRepository implements IClientRepository {
 		const updated = await repo.save(clientEntity);
 		return ClientMapper.toDomain(updated);
 	}
-	async getAll(paginacion: Pagination): Promise<Client[]> {
-		throw new Error('Method not implemented.' + paginacion);
+	async getAll(): Promise<Client[]> {
+		throw new Error('Method not implemented.');
 	}
 
 	async delete(id: string): Promise<void> {

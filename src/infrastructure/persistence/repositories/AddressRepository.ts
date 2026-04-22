@@ -1,6 +1,5 @@
 import { inject, injectable } from 'tsyringe';
 import { IEntityManagerProvider, IEntityManagerProviderToken } from '@core/interfaces/IEntityManagerProvider';
-import { Pagination } from '@core/model/Pagination';
 
 import { Address } from '@domain/address/entities/Address';
 import { DateUtils } from '@shared/utils/Date';
@@ -19,39 +18,32 @@ export class AddressRepository implements IAddressRepository {
 
 	async create(entity: Address): Promise<Address> {
 		const manager = this.emProvider.getManager();
-		const repo = manager.getRepository(AddressEntity);
-		const persisted = await repo.save(AddressMapper.toPersistence(entity));
-		return AddressMapper.toDomain(persisted);
+		const addressEntity = AddressMapper.toPersistence(entity);
+		const entitySaved = await manager.getRepository(AddressEntity).save(addressEntity);
+		return AddressMapper.toDomain(entitySaved);
 	}
 
 	async getById(id: string): Promise<Address | null> {
 		const manager = this.emProvider.getManager();
-		const repo = manager.getRepository(AddressEntity);
-		const found = await repo.findOne({ where: { id } });
-		return found ? AddressMapper.toDomain(found) : null;
+		const address = await manager.getRepository(AddressEntity).findOne(
+			{ where: { id: id }}
+		);
+		if (!address) {return null;}
+		return AddressMapper.toDomain(address);
 	}
 
-	async getAll(paginacion: Pagination): Promise<Address[]> {
+	async getAll(): Promise<Address[]> {
 		const manager = this.emProvider.getManager();
 		const repo = manager.getRepository(AddressEntity);
 
-		const page = Math.max(1, paginacion.page);
-		const limit = Math.max(1, paginacion.pageSize);
-		const skip = Math.max(
-			0,
-			Number((page - 1) * limit)
-		);
-
 		const rows = await repo.find({
-			skip,
-			take: limit,
 			order: { date: 'DESC', id: 'DESC' }
 		});
 
 		return rows.map((row) => AddressMapper.toDomain(row));
 	}
 
-	async getPerClientNeeds(date: Date): Promise<RecipeByClientDTO[]> {
+	async getRecipesByClient(date: Date): Promise<RecipeByClientDTO[]> {
 		const manager = this.emProvider.getManager();
 		const formattedDate = DateUtils.formatDate(date);
 		const result = await manager.query(`
@@ -70,7 +62,8 @@ export class AddressRepository implements IAddressRepository {
                 AND mp."startDate" <= $1::date
                 AND mp."endDate" >= $1::date
                 AND dd."date" = $1
-            GROUP BY c."id", c."name", ddr."recipeId"; `,
+                AND a."needsDelivery" = true
+            GROUP BY c."id", c."name", ddr."recipeId";`,
 		[formattedDate]
 		);
 		if (result.length === 0) {
@@ -116,7 +109,7 @@ export class AddressRepository implements IAddressRepository {
 		);
 	}
 
-	async getAddressByDateAndClientId(clientId: number, date: Date): Promise<Address | null> {
+	async getAddressByDateAndClientId(clientId: string, date: Date): Promise<Address | null> {
 
 		const start = new Date(date);
 		start.setHours(0, 0, 0, 0);
@@ -139,23 +132,6 @@ export class AddressRepository implements IAddressRepository {
 		if (addressRaw === null) {return null;}
 
 		return AddressMapper.toDomain(addressRaw);
-	}
-
-	async addAsync(entity: Address): Promise<void> {
-		const manager = this.emProvider.getManager();
-		const addressEntity = AddressMapper.toPersistence(entity);
-
-		await manager.getRepository(AddressEntity).save(addressEntity);
-	}
-
-	async getByIdAsync(id: string, readOnly?: boolean): Promise<Address | null> {
-		console	.log(`Fetching address with id: ${id} (readOnly: ${readOnly})`);
-		const manager = this.emProvider.getManager();
-		const address = await manager.getRepository(AddressEntity).findOne(
-			{ where: { id: id }}
-		);
-		if (!address) {return null;}
-		return AddressMapper.toDomain(address);
 	}
 
 	async update(address: Address): Promise<Address> {

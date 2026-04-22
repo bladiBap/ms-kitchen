@@ -1,5 +1,5 @@
 export interface OrderDTO {
-    id: number;
+    id: string;
     dateOrdered: string;
     dateCreatedOn: string;
     status: number;
@@ -7,27 +7,27 @@ export interface OrderDTO {
 }
 
 export interface OrderItemDTO {
-    id: number;
+    id: string;
     quantity: number;
     status: number;
     recipe: RecipeDTO;
 }
 
 export interface RecipeDTO {
-    id: number;
+    id: string;
     name: string;
     instructions: string;
     ingredients: IngredientDTO[];
 }
 
 export interface IngredientDTO {
-    id: number;
+    id: string;
     name: string;
     measurementUnit: MeasurementUnitDTO;
 }
 
 export interface MeasurementUnitDTO {
-    id: number;
+    id: string;
     name: string;
     simbol: string;
 }

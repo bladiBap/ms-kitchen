@@ -7,7 +7,7 @@ export class AllocationLineMapper  {
 		const lineEntity = new AllocationLineEntity();
 
 		lineEntity.id = allocationLine.getId();
-		lineEntity.allocationId = allocationLine.getAllocationId();
+		lineEntity.allocationId = allocationLine.getDailyAllocationId();
 		lineEntity.clientId = allocationLine.getClientId();
 		lineEntity.recipeId = allocationLine.getRecipeId();
 		lineEntity.quantityNeeded = allocationLine.getQuantityNeeded();

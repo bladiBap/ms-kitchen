@@ -1,4 +1,4 @@
-import { ExceptionType } from './ExceptionType';
+import { ExceptionType } from '@core/results/ExceptionType';
 
 export class Exception {
 	static readonly None = new Exception('', '', ExceptionType.Failure);

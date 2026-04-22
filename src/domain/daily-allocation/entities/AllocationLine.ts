@@ -5,15 +5,15 @@ import { AllocationLineError } from '@domain/daily-allocation/errors/AllocationL
 
 export class AllocationLine extends Entity {
 
-	private allocationId : string;
+	private dailyAllocationId : string;
 	private clientId : string;
 	private recipeId : string;
 	private quantityNeeded : number;
 	private quantityPackaged : number;
 
-	constructor( id: string, allocationId: string, clientId: string, recipeId: string,  quantityNeeded: number, quantityPackaged: number = 0) {
+	constructor( id: string, dailyAllocationId: string, clientId: string, recipeId: string,  quantityNeeded: number, quantityPackaged: number = 0) {
 		super(id);
-		this.allocationId = allocationId;
+		this.dailyAllocationId = dailyAllocationId;
 		this.clientId = clientId;
 		this.recipeId = recipeId;
 		if (quantityNeeded <= 0) {
@@ -27,8 +27,8 @@ export class AllocationLine extends Entity {
 		this.quantityPackaged = quantityPackaged;
 	}
 
-	public static createNew(allocationId: string, clientId: string, recipeId: string, quantityNeeded: number) : AllocationLine {
-		return new AllocationLine(uuidv4(), allocationId, clientId, recipeId, quantityNeeded);
+	public static createNew(dailyAllocationId: string, clientId: string, recipeId: string, quantityNeeded: number) : AllocationLine {
+		return new AllocationLine(uuidv4(), dailyAllocationId, clientId, recipeId, quantityNeeded);
 	}
 
 	public updateQuantityPackaged(newQuantityPackaged: number) : void {
@@ -58,7 +58,7 @@ export class AllocationLine extends Entity {
 		return this.quantityPackaged;
 	}
 
-	public getAllocationId() : string {
-		return this.allocationId;
+	public getDailyAllocationId() : string {
+		return this.dailyAllocationId;
 	}
 }

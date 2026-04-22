@@ -1,6 +1,6 @@
 
 export interface CreatePackageDTO {
-    clientId: number;
-    addressId: number;
-    recipeIds: number[];
+    clientId: string;
+    addressId: string;
+    recipeIds: string[];
 }

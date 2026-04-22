@@ -1,9 +1,9 @@
 import { IRepository } from '@core/interfaces/IRepository';
-import { Order } from '../entities/Order';
+import { Order } from '@domain/order/entities/Order';
+
+export const IOrderRepositoryToken = Symbol('IOrderRepository');
 
 export interface IOrderRepository extends IRepository<Order> {
-    deleteAsync(id: number): Promise<void>;
-    findByDateAsync(date: Date): Promise<Order | null>;
-    updatedAsync( order: Order): Promise<Order>;
-    getByIdTodayAsync(id: number, readOnly?: boolean): Promise<Order | null>;
+    findByDate(date: Date): Promise<Order | null>;
+    getByIdToday(id: string): Promise<Order | null>;
 }

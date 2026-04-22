@@ -13,6 +13,7 @@ export class AddressMapper {
 		addressEntity.reference = order.getReference();
 		addressEntity.latitude = order.getLocation().getLatitude();
 		addressEntity.longitude = order.getLocation().getLongitude();
+		addressEntity.needsDelivery = order.getNeedsDelivery();
 		return addressEntity;
 	}
 
@@ -24,7 +25,8 @@ export class AddressMapper {
 			data.date,
 			data.address,
 			data.reference,
-			coordinates
+			coordinates,
+			data.needsDelivery
 		);
 	}
 }

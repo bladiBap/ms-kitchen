@@ -1,6 +1,12 @@
 import { inject, injectable } from 'tsyringe';
 import { DataSource, EntityManager, QueryRunner } from 'typeorm';
+
+import { Mediator } from '@shared/mediator/Mediator';
+import { IMediator } from '@core/interfaces/IMediator';
+import { DomainEvent } from '@core/abstraction/DomainEvent';
 import { IUnitOfWork } from '@core/interfaces/IUnitOfWork';
+
+import { DomainEventsCollector } from '@application/DomainEventsCollector';
 import { AppDataSourceToken } from '@infrastructure/persistence/data-source/DataSource';
 
 @injectable()
@@ -9,7 +15,10 @@ export class UnitOfWork implements IUnitOfWork {
 	private readonly dataSource: DataSource;
 	private readonly ramdomName: string;
 
-	constructor(@inject(AppDataSourceToken) dataSource: DataSource) {
+	constructor(
+		@inject(AppDataSourceToken) dataSource: DataSource,
+		@inject(Mediator) private readonly mediator: IMediator
+	) {
 		this.dataSource = dataSource;
 		this.ramdomName = Math.random().toString(36).substring(2, 15);
 	}
@@ -24,6 +33,10 @@ export class UnitOfWork implements IUnitOfWork {
 	async commit(): Promise<void> {
 		try {
 			await this.queryRunner.commitTransaction();
+			const domainEventsCollector = this.extractDomainEvents();
+			for (const domainEvent of domainEventsCollector) {
+				await this.mediator.publish(domainEvent);
+			}
 		} catch (err) {
 			await this.queryRunner.rollbackTransaction();
 			throw err;
@@ -43,7 +56,11 @@ export class UnitOfWork implements IUnitOfWork {
 		}
 	}
 
-	getEntityManager(): EntityManager {
+	private extractDomainEvents(): DomainEvent[] {
+		return DomainEventsCollector.pullAll();
+	}
+
+	getManager(): EntityManager {
 		return this.queryRunner.manager;
 	}
 }

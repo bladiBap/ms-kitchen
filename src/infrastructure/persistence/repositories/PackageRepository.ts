@@ -1,10 +1,11 @@
-import { IPackageRepository } from '@domain/Package/Repositories/IPackageRepository';
-import { Package } from '../PersistenceModel/Entities/Package';
-import { Package as DomainPackage } from '@domain/Package/Entities/Package';
-import { PackageMapper } from '../DomainModel/Config/PackageMapper';
-
 import { inject, injectable } from 'tsyringe';
 import { IEntityManagerProvider, IEntityManagerProviderToken } from '@core/interfaces/IEntityManagerProvider';
+
+import { Package } from '@domain/package/entities/Package';
+import { IPackageRepository } from '@domain/package/repositories/IPackageRepository';
+
+import { PackageMapper } from '@infrastructure/persistence/mappers/PackageMapper';
+import { PackageEntity } from '@infrastructure/persistence/entities/Package';
 
 @injectable()
 export class PackageRepository implements IPackageRepository {
@@ -12,32 +13,47 @@ export class PackageRepository implements IPackageRepository {
 	constructor(
         @inject(IEntityManagerProviderToken) private readonly emProvider: IEntityManagerProvider
 	) {}
-
-	async getDetailsByIdAsync(id: number, readOnly?: boolean): Promise<DomainPackage | null> {
-		console.log(`Fetching package details with id: ${id} (readOnly: ${readOnly})`);
-		throw new Error('Method not implemented.');
-	}
-
-	async getByIdAsync(id: number, readOnly?: boolean): Promise<DomainPackage | null> {
-		console.log(`Fetching package with id: ${id} (readOnly: ${readOnly})`);
-		throw new Error('Method not implemented.');
-	}
-
-	async addAsync(packageDomain: DomainPackage): Promise<void> {
+	async create(entity: Package): Promise<Package> {
 		const manager = this.emProvider.getManager();
-		const packageEntity = PackageMapper.toPersistence(packageDomain);
-		await manager.getRepository(Package).save(packageEntity);
+		const packageEntity = PackageMapper.toPersistence(entity);
+		const saved = await manager.getRepository(PackageEntity).save(packageEntity);
+		return PackageMapper.toDomain(saved);
 	}
 
-	async getPackageByAddressClientIdAsync(addressId: number, clientId: number): Promise<DomainPackage | null> {
+	async getById(id: string): Promise<Package | null> {
 		const manager = this.emProvider.getManager();
-		const datePk = new Date();
-		datePk.setHours(0, 0, 0, 0);
-		const packageD = await manager.getRepository(Package).findOne({
+		const packageEntity = await manager.getRepository(PackageEntity).findOne({
+			where: { id },
+		});
+
+		return packageEntity ? PackageMapper.toDomain(packageEntity) : null;
+	}
+
+	async update(entity: Package): Promise<Package> {
+		const manager = this.emProvider.getManager();
+		const packageEntity = PackageMapper.toPersistence(entity);
+		const saved = await manager.getRepository(PackageEntity).save(packageEntity);
+		return PackageMapper.toDomain(saved);
+	}
+
+	async delete(id: string): Promise<void> {
+		const manager = this.emProvider.getManager();
+		await manager.getRepository(PackageEntity).delete(id);
+	}
+
+	async getAll(): Promise<Package[]> {
+		const manager = this.emProvider.getManager();
+		const repository = manager.getRepository(PackageEntity);
+		const packages = await repository.find();
+		return packages.map((packageEntity) => PackageMapper.toDomain(packageEntity));
+	}
+
+	async getPackageByAddressClientId(addressId: string, clientId: string): Promise<Package | null> {
+		const manager = this.emProvider.getManager();
+		const packageD = await manager.getRepository(PackageEntity).findOne({
 			where: {
 				address: { id: addressId },
-				client: { id: clientId },
-				//datePackage: datePk
+				client: { id: clientId }
 			}
 		});
 		if (!packageD) {return null;}

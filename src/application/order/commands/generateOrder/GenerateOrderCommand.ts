@@ -1,7 +1,7 @@
-import { IRequest } from '@common/Core/Abstractions/IResquest';
-import { IResult } from '@common/Core/Abstractions/IResult';
+import { Result } from '@core/results/Result';
+import { IRequest } from '@core/interfaces/IRequest';
 
-export class GenerateOrderCommand implements IRequest<IResult> {
-	_result!: IResult;
+export class GenerateOrderCommand implements IRequest<Result> {
+	data!: Result;
 	constructor(public readonly date: Date) {}
 }

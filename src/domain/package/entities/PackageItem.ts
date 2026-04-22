@@ -14,7 +14,7 @@ export class PackageItem extends Entity {
 		this.quantity = quantity;
 	}
 
-	public static create(recipeId: string, packageId: string, quantity: number): PackageItem {
+	public static createNew(recipeId: string, packageId: string, quantity: number): PackageItem {
 		return new PackageItem(uuidv4(), recipeId, packageId, quantity);
 	}
 

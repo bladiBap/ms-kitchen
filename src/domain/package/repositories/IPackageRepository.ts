@@ -1,7 +1,8 @@
+import { Package } from '@domain/package/entities/Package';
 import { IRepository } from '@core/interfaces/IRepository';
-import { Package } from '../entities/Package';
+
+export const IPackageRepositoryToken = Symbol.for('IPackageRepository');
 
 export interface IPackageRepository extends IRepository<Package> {
-    getDetailsByIdAsync(id: number, readOnly?: boolean): Promise<Package | null>;
-    getPackageByAddressClientIdAsync(addressId: number, clientId: number): Promise<Package | null>;
+    getPackageByAddressClientId(addressId: string, clientId: string): Promise<Package | null>;
 }

@@ -4,6 +4,7 @@ import { StatusPackage } from '@domain/package/types/StatusPackage';
 import { PackageItemEntity } from './PackageItem';
 import { ClientEntity } from './Client';
 import { AddressEntity } from './Address';
+import { OrderEntity } from './Order';
 
 @Entity({
 	name: 'package'
@@ -18,7 +19,7 @@ export class PackageEntity {
     @Column({ type: 'date' })
     	datePackage!: Date;
 
-    @Column({ type: 'enum', enum: StatusPackage, default: StatusPackage.PACKAGING })
+    @Column({ type: 'enum', enum: StatusPackage, default: StatusPackage.CREATED })
     	status!: StatusPackage;
 
     @OneToMany(() => PackageItemEntity, (packageItem) => packageItem.package, { cascade: true, eager: true })
@@ -31,6 +32,13 @@ export class PackageEntity {
     @OneToOne(() => AddressEntity, (address) => address.package, { cascade: true, eager: true })
     @JoinColumn({ name: 'addressId' })
     	address!: AddressEntity;
+
+	@ManyToOne(() => OrderEntity, (order) => order.packages)
+	@JoinColumn({ name: 'orderId' })
+	order!: OrderEntity;
+
+	@Column()
+	orderId!: string;
 
     @Column()
     	clientId!: string;

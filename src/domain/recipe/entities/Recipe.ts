@@ -1,6 +1,6 @@
 import { Entity } from '@core/abstraction/Entity';
 import { DomainException } from '@core/results/DomainException';
-import { RecipeError } from '../errors/RecipeError';
+import { RecipeError } from '@domain/recipe/errors/RecipeError';
 
 export class Recipe extends Entity {
 

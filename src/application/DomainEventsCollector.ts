@@ -1,4 +1,4 @@
-import { DomainEvent } from '@common/Core/Abstractions/DomainEvent';
+import { DomainEvent } from '@core/abstraction/DomainEvent';
 
 export class DomainEventsCollector {
 	private static events: DomainEvent[] = [];

@@ -6,6 +6,7 @@ import { StatusOrder } from '@domain/order/types/StatusOrderEnum';
 
 import { AggregateRoot } from '@core/abstraction/AgregateRoot';
 import { DomainException } from '@core/results/DomainException';
+import { OrderCompletedEvent } from '../events/OrderCompletedEvent';
 
 export class Order extends AggregateRoot {
 
@@ -30,11 +31,8 @@ export class Order extends AggregateRoot {
 		if (this.status === StatusOrder.COMPLETED){
 			throw new DomainException( OrderError.canNotChangeStatus(this.status, StatusOrder.COMPLETED) );
 		}
-
-		if (!this.verifyIfAllItemsCompleted()) {
-			throw new DomainException( OrderError.orderItemsNotCompleted(this.id) );
-		}
 		this.status = StatusOrder.COMPLETED;
+		this.addDomainEvent(new OrderCompletedEvent(this.id, this.dateOrdered));
 	}
 
 	public addItem(recipeId: string, quantityPlanned: number, quantityPrepared: number, quantityDelivered: number, status: StatusOrder) : void {
@@ -42,7 +40,7 @@ export class Order extends AggregateRoot {
 		this.listOrderItems.push(newItem);
 	}
 
-	private verifyIfAllItemsCompleted (): boolean {
+	public verifyIfAllItemsCompleted (): boolean {
 		return this.listOrderItems.every(item => item.getStatus() === StatusOrder.COMPLETED);
 	}
 
