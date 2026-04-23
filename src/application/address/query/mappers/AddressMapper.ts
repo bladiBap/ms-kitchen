@@ -1,6 +1,6 @@
 import { AddressDTO } from '@application/address/dto/AddressDto';
 import { DateUtils } from '@shared/utils/Date';
-import { AddressEntity } from '@infrastructure/persistence/entities/Address';
+import { AddressEntity } from '@infrastructure/persistence/entities/AddressEntity';
 
 export class AddressDTOMapper {
 	static toDTO(address: AddressEntity): AddressDTO {

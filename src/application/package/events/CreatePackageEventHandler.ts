@@ -32,7 +32,7 @@ export class CreatePackageEventHandler implements IEventDomainHandler<OrderCompl
 			const dailyAllocation = await this.dailyAllocationRepository.getDailyAllocation(clientId, dateOrder);
 			const address = await this.addressRepository.getAddressByDateAndClientId(clientId, dateOrder);
 
-			if (!dailyAllocation || !address) {
+			if (!dailyAllocation || !address || !address.getNeedsDelivery()) {
 				continue;
 			}
 

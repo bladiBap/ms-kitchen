@@ -1,14 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { DailyAllocationEntity } from './DailyAllocation';
-import { ClientEntity } from './Client';
-import { RecipeEntity } from './Recipe';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { DailyAllocationEntity } from './DailyAllocationEntity';
+import { ClientEntity } from './ClientEntity';
+import { RecipeEntity } from './RecipeEntity';
 
 @Entity({
 	name: 'allocation_line'
 })
 export class AllocationLineEntity {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn('uuid')
     	id!: string;
 
     @ManyToOne(() => DailyAllocationEntity, a => a.lines)

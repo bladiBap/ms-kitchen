@@ -1,17 +1,18 @@
 import {
-	Entity, PrimaryGeneratedColumn, Column, OneToMany
+	Entity, Column, OneToMany,
+	PrimaryColumn
 } from 'typeorm';
 
-import { MealPlanEntity } from './MealPlan';
-import { PackageEntity } from './Package';
-import { AllocationLineEntity } from './AllocationLine';
-import { CalendarEntity } from './Calendar';
+import { MealPlanEntity } from './MealPlanEntity';
+import { PackageEntity } from './PackageEntity';
+import { AllocationLineEntity } from './AllocationLineEntity';
+import { CalendarEntity } from './CalendarEntity';
 
 @Entity({
 	name: 'client'
 })
 export class ClientEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn('uuid')
     	id!: string;
 
     @Column()

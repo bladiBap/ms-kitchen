@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe';
 import { OutboxMapper } from '@outbox/mappers/OutboxMapper';
 import { OutboxMessage } from '@outbox/model/OutboxMessage';
-import { OutboxMessageEntity } from '@outbox/persistence/OutboxMessage';
+import { OutboxMessageEntity } from '@outbox/persistence/OutboxMessageEntity';
 import { IOutboxRepository } from '@outbox/repository/IOutboxRepository';
 import { IOutboxService } from '@outbox/service/interface/IOutboxService';
 import { IOutboxDatabase } from '@outbox/repository/IOutboxDatabase';

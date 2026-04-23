@@ -1,8 +1,8 @@
 import { Package } from '@domain/package/entities/Package';
-import { PackageEntity } from '@infrastructure/persistence/entities/Package';
+import { PackageEntity } from '@infrastructure/persistence/entities/PackageEntity';
 
 import { PackageItem } from '@domain/package/entities/PackageItem';
-import { PackageItemEntity } from '@infrastructure/persistence/entities/PackageItem';
+import { PackageItemEntity } from '@infrastructure/persistence/entities/PackageItemEntity';
 
 import { PackageItemMapper } from '@infrastructure/persistence/mappers/PackageItemMapper';
 

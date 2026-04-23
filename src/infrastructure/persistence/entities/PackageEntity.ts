@@ -1,16 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany, ManyToOne, OneToOne, JoinColumn } from 'typeorm';
 import { StatusPackage } from '@domain/package/types/StatusPackage';
 
-import { PackageItemEntity } from './PackageItem';
-import { ClientEntity } from './Client';
-import { AddressEntity } from './Address';
-import { OrderEntity } from './Order';
+import { PackageItemEntity } from './PackageItemEntity';
+import { ClientEntity } from './ClientEntity';
+import { AddressEntity } from './AddressEntity';
+import { OrderEntity } from './OrderEntity';
 
 @Entity({
 	name: 'package'
 })
 export class PackageEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column()

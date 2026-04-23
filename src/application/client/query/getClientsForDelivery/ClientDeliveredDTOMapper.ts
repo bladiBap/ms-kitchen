@@ -1,4 +1,4 @@
-import { AddressEntity } from '@infrastructure/persistence/entities/Address';
+import { AddressEntity } from '@infrastructure/persistence/entities/AddressEntity';
 import { IClientDeliveredDTO } from '@application/client/dto/ClientToDelivered';
 
 export class ClientDeliveredDTOMapper {

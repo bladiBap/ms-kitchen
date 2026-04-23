@@ -8,7 +8,7 @@ import { AddressDTO } from '@application/address/dto/AddressDto';
 import { GetAddressByIdQuery } from '@application/address/query/GetAddressByIdQuery';
 import { AddressDTOMapper } from '@application/address/query/mappers/AddressMapper';
 
-import { AddressEntity } from '@infrastructure/persistence/entities/Address';
+import { AddressEntity } from '@infrastructure/persistence/entities/AddressEntity';
 import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 import { IRequestHandler } from '@core/interfaces/IRequestHandler';
 

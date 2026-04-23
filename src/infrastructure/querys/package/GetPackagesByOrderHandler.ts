@@ -6,7 +6,7 @@ import { IRequestHandler } from '@core/interfaces/IRequestHandler';
 import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 import { GetPackagesByOrderQuery } from '@application/package/queries/getPackagesByOrderQuery/GetPackagesByOrderQuery';
 import { PackageDTO } from '@application/package/dto/PackageDTO';
-import { PackageEntity } from '@infrastructure/persistence/entities/Package';
+import { PackageEntity } from '@infrastructure/persistence/entities/PackageEntity';
 
 @injectable()
 export class GetPackagesByOrderHandler implements IRequestHandler<GetPackagesByOrderQuery, ResultWithValue<PackageDTO[]>> {

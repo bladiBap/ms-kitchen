@@ -1,16 +1,16 @@
 import {
-	Entity, PrimaryGeneratedColumn, Column, ManyToOne,
+	Entity, PrimaryColumn, Column, ManyToOne,
 	ManyToMany, JoinTable, JoinColumn
 } from 'typeorm';
 
-import { RecipeEntity } from './Recipe';
-import { MealPlanEntity } from './MealPlan';
+import { RecipeEntity } from './RecipeEntity';
+import { MealPlanEntity } from './MealPlanEntity';
 
 @Entity({
 	name: 'dayli_diet'
 })
 export class DayliDietEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column({ type: 'date' })

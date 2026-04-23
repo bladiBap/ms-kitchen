@@ -1,8 +1,8 @@
 import { DailyAllocation } from '@domain/daily-allocation/entities/DailyAllocation';
-import { DailyAllocationEntity } from '@infrastructure/persistence/entities/DailyAllocation';
+import { DailyAllocationEntity } from '@infrastructure/persistence/entities/DailyAllocationEntity';
 
 import { AllocationLine} from '@domain/daily-allocation/entities/AllocationLine';
-import { AllocationLineEntity } from '@infrastructure/persistence/entities/AllocationLine';
+import { AllocationLineEntity } from '@infrastructure/persistence/entities/AllocationLineEntity';
 
 export class DailyAllocationMapper  {
 

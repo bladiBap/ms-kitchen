@@ -1,5 +1,5 @@
 import { Client } from '@domain/client/entities/Client';
-import { ClientEntity } from '@infrastructure/persistence/entities/Client';
+import { ClientEntity } from '@infrastructure/persistence/entities/ClientEntity';
 
 export class ClientMapper  {
 

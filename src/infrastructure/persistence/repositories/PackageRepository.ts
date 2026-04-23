@@ -5,7 +5,7 @@ import { Package } from '@domain/package/entities/Package';
 import { IPackageRepository } from '@domain/package/repositories/IPackageRepository';
 
 import { PackageMapper } from '@infrastructure/persistence/mappers/PackageMapper';
-import { PackageEntity } from '@infrastructure/persistence/entities/Package';
+import { PackageEntity } from '@infrastructure/persistence/entities/PackageEntity';
 
 @injectable()
 export class PackageRepository implements IPackageRepository {

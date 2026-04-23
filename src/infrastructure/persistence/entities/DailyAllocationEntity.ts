@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
-import { AllocationLineEntity } from './AllocationLine';
+import { Entity, PrimaryColumn, Column, OneToMany, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { AllocationLineEntity } from './AllocationLineEntity';
 
 @Entity({
 	name: 'daily_allocation'
 })
 export class DailyAllocationEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column({ type: 'date' })

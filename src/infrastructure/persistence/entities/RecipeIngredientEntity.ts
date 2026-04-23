@@ -1,12 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
-import { IngredientEntity } from './Ingredient';
-import { RecipeEntity } from './Recipe';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { IngredientEntity } from './IngredientEntity';
+import { RecipeEntity } from './RecipeEntity';
 
 @Entity({
 	name: 'recipe_ingredient'
 })
 export class RecipeIngredientEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn('uuid')
     	id!: string;
 
     @Column()

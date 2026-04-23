@@ -1,18 +1,18 @@
 import {
-	Entity, PrimaryGeneratedColumn, Column, ManyToOne,
+	Entity, PrimaryColumn, Column, ManyToOne,
 	OneToMany, JoinColumn,
 	OneToOne
 } from 'typeorm';
 
-import { DayliDietEntity } from './DayliDiet';
-import { ClientEntity } from './Client';
-import { CalendarEntity } from './Calendar';
+import { DayliDietEntity } from './DayliDietEntity';
+import { ClientEntity } from './ClientEntity';
+import { CalendarEntity } from './CalendarEntity';
 
 @Entity({
 	name: 'meal_plan'
 })
 export class MealPlanEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column({ type: 'date' })
@@ -28,7 +28,6 @@ export class MealPlanEntity {
     	dayliDiets!: DayliDietEntity[];
 
     @OneToOne(() => CalendarEntity, (calendar) => calendar.mealPlan, { cascade: true, eager: true })
-    @JoinColumn({ name: 'calendarId' })
     	calendar!: CalendarEntity;
 
     @ManyToOne(() => ClientEntity, (client) => client.mealPlans, { eager: true })

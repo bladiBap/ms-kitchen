@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({
-	name: 'outbox_messages'
+	name: 'outbox_message'
 })
 export class OutboxMessageEntity {
     @PrimaryGeneratedColumn('uuid')

@@ -9,8 +9,8 @@ import { IDailyAllocationRepository } from '@domain/daily-allocation/repositorie
 
 import { AllocationLineMapper } from '@infrastructure/persistence/mappers/AllocationLineMapper';
 import { DailyAllocationMapper } from '@infrastructure/persistence/mappers/DailyAllocationMapper';
-import { DailyAllocationEntity } from '@infrastructure/persistence/entities/DailyAllocation';
-import { AllocationLineEntity } from '@infrastructure/persistence/entities/AllocationLine';
+import { DailyAllocationEntity } from '@infrastructure/persistence/entities/DailyAllocationEntity';
+import { AllocationLineEntity } from '@infrastructure/persistence/entities/AllocationLineEntity';
 
 @injectable()
 export class DailyAllocationRepository implements IDailyAllocationRepository {

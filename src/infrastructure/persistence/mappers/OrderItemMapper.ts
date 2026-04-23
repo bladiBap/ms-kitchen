@@ -1,5 +1,5 @@
 import { OrderItem } from '@domain/order/entities/OrderItem';
-import { OrderItemEntity } from '@infrastructure/persistence/entities/OrderItem';
+import { OrderItemEntity } from '@infrastructure/persistence/entities/OrderItemEntity';
 
 export class OrderItemMapper {
 	static toPersistenceList(items: OrderItem[]): OrderItemEntity[] {

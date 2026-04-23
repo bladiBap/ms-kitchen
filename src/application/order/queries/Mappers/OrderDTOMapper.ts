@@ -1,4 +1,4 @@
-import { OrderEntity } from '@infrastructure/persistence/entities/Order';
+import { OrderEntity } from '@infrastructure/persistence/entities/OrderEntity';
 import { OrderDTO } from '@application/order/dto/OrderDTO';
 
 export class OrderDTOMapper {

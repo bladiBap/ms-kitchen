@@ -1,8 +1,8 @@
 import { Order } from '@domain/order/entities/Order';
-import { OrderEntity } from '@infrastructure/persistence/entities/Order';
+import { OrderEntity } from '@infrastructure/persistence/entities/OrderEntity';
 
 import { OrderItem } from '@domain/order/entities/OrderItem';
-import { OrderItemEntity } from '@infrastructure/persistence/entities/OrderItem';
+import { OrderItemEntity } from '@infrastructure/persistence/entities/OrderItemEntity';
 
 export class OrderMapper {
 
@@ -25,7 +25,7 @@ export class OrderMapper {
 		});
 
 		const orderEntity = new OrderEntity();
-		
+
 		orderEntity.id = order.getId();
 		orderEntity.dateOrdered = order.getDateOrdered();
 		orderEntity.dateCreatedOn = order.getDateCreatedOn();

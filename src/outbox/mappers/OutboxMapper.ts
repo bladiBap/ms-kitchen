@@ -1,7 +1,7 @@
 import { plainToInstance } from 'class-transformer';
 import { EventMap } from '@domain/event-map/EventMap';
 import { OutboxMessage } from '@outbox/model/OutboxMessage';
-import { OutboxMessageEntity } from '@outbox/persistence/OutboxMessage';
+import { OutboxMessageEntity } from '@outbox/persistence/OutboxMessageEntity';
 
 export class OutboxMapper {
 

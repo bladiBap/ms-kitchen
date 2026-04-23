@@ -7,7 +7,7 @@ import { OrderItem } from '@domain/order/entities/OrderItem';
 import { IOrderItemRepository } from '@domain/order/repositories/IOrderItemRepository';
 
 import { OrderItemMapper } from '@infrastructure/persistence/mappers/OrderItemMapper';
-import { OrderItemEntity } from '@infrastructure/persistence/entities/OrderItem';
+import { OrderItemEntity } from '@infrastructure/persistence/entities/OrderItemEntity';
 
 
 @injectable()

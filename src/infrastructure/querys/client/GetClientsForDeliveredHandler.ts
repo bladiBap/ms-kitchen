@@ -8,7 +8,7 @@ import { IClientDeliveredDTO } from '@application/client/dto/ClientToDelivered';
 import { GetClientsForDeliveredQuery } from '@application/client/query/getClientsForDelivery/GetClientsForDeliveredQuery';
 import { ClientDeliveredDTOMapper } from '@application/client/query/getClientsForDelivery/ClientDeliveredDTOMapper';
 
-import { AddressEntity } from '@infrastructure/persistence/entities/Address';
+import { AddressEntity } from '@infrastructure/persistence/entities/AddressEntity';
 import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 @injectable()

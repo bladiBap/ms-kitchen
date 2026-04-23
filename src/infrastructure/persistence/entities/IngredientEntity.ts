@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, OneToMany, JoinColumn } from 'typeorm';
 
-import { MeasurementUnitEntity } from './MeasurementUnit';
-import { RecipeIngredientEntity } from './RecipeIngredient';
+import { MeasurementUnitEntity } from './MeasurementUnitEntity';
+import { RecipeIngredientEntity } from './RecipeIngredientEntity';
 
 @Entity({
 	name: 'ingredient'
 })
 export class IngredientEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column()

@@ -1,21 +1,22 @@
 import {
-	Entity, PrimaryGeneratedColumn, OneToMany, OneToOne,
+	Entity, PrimaryColumn, OneToMany, OneToOne,
 	JoinColumn,
 	ManyToOne,
 	Column
 } from 'typeorm';
-import { MealPlanEntity } from './MealPlan';
-import { AddressEntity } from './Address';
-import { ClientEntity } from './Client';
+import { ClientEntity } from './ClientEntity';
+import { AddressEntity } from './AddressEntity';
+import { MealPlanEntity } from './MealPlanEntity';
 
 @Entity({
 	name: 'calendar'
 })
 export class CalendarEntity{
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @OneToOne(() => MealPlanEntity, (mealPlan) => mealPlan.calendar)
+	@JoinColumn({ name: 'mealPlanId' })
     	mealPlan!: MealPlanEntity;
 
     @OneToMany(() => AddressEntity, (address) => address.calendar)

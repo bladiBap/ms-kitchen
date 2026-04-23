@@ -1,5 +1,5 @@
 import { PackageItem } from '@domain/package/entities/PackageItem';
-import { PackageItemEntity } from '@infrastructure/persistence/entities/PackageItem';
+import { PackageItemEntity } from '@infrastructure/persistence/entities/PackageItemEntity';
 
 export class PackageItemMapper {
 	static toPersistenceList(items: PackageItem[]): PackageItemEntity[] {

@@ -6,7 +6,7 @@ import { IEntityManagerProvider, IEntityManagerProviderToken } from '@core/inter
 import { Order } from '@domain/order/entities/Order';
 import { IOrderRepository } from '@domain/order/repositories/IOrderRepository';
 
-import { OrderEntity } from '@infrastructure/persistence/entities/Order';
+import { OrderEntity } from '@infrastructure/persistence/entities/OrderEntity';
 import { OrderMapper } from '@infrastructure/persistence/mappers/OrderMapper';
 
 @injectable()

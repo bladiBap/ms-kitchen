@@ -1,14 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { StatusOrder } from '@domain/order/types/StatusOrderEnum';
 
-import { OrderEntity } from './Order';
-import { RecipeEntity } from './Recipe';
+import { OrderEntity } from './OrderEntity';
+import { RecipeEntity } from './RecipeEntity';
 
 @Entity({
 	name: 'order_item'
 })
 export class OrderItemEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column({

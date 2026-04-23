@@ -1,14 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
 import { StatusOrder } from '@domain/order/types/StatusOrderEnum';
 
-import { OrderItemEntity } from './OrderItem';
-import { PackageEntity } from './Package';
+import { OrderItemEntity } from './OrderItemEntity';
+import { PackageEntity } from './PackageEntity';
 
 @Entity({
 	name: 'order'
 })
 export class OrderEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column({ type: 'date' })

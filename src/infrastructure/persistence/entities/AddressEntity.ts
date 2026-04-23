@@ -1,15 +1,16 @@
 import {
-	Entity, PrimaryGeneratedColumn, Column,
-	ManyToOne, JoinColumn, OneToOne
+	Entity, Column,
+	ManyToOne, JoinColumn, OneToOne,
+	PrimaryColumn
 } from 'typeorm';
-import { CalendarEntity } from './Calendar';
-import { PackageEntity } from './Package';
+import { CalendarEntity } from './CalendarEntity';
+import { PackageEntity } from './PackageEntity';
 
 @Entity({
 	name: 'address'
 })
 export class AddressEntity{
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn('uuid')
     	id!: string;
 
     @Column({ type: 'date' })

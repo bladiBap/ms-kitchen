@@ -1,19 +1,19 @@
 import {
-	Entity, PrimaryGeneratedColumn, Column,
+	Entity, PrimaryColumn, Column,
 	OneToMany, ManyToMany
 } from 'typeorm';
 
-import { RecipeIngredientEntity } from './RecipeIngredient';
-import { DayliDietEntity } from './DayliDiet';
-import { PackageItemEntity } from './PackageItem';
-import { OrderItemEntity } from './OrderItem';
-import { AllocationLineEntity } from './AllocationLine';
+import { RecipeIngredientEntity } from './RecipeIngredientEntity';
+import { DayliDietEntity } from './DayliDietEntity';
+import { PackageItemEntity } from './PackageItemEntity';
+import { OrderItemEntity } from './OrderItemEntity';
+import { AllocationLineEntity } from './AllocationLineEntity';
 
 @Entity({
 	name: 'recipe'
 })
 export class RecipeEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column()

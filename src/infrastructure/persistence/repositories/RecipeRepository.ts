@@ -40,7 +40,7 @@ export class RecipeRepository implements IRecipeRepository {
                 COUNT(ddr."recipeId") AS "quantity"
             FROM "address" a
             INNER JOIN "calendar" c ON c."id" = a."calendarId"
-            INNER JOIN "meal_plan" mp ON mp."calendarId" = c."id"
+            INNER JOIN "meal_plan" mp ON mp."id" = c."mealPlanId"
             INNER JOIN "dayli_diet" dd ON dd."mealPlanId" = mp."id"
             INNER JOIN "dayli_diet_recipes" ddr ON ddr."dayliDietId" = dd."id"
             WHERE a."date" = $1 AND dd."date" = $1

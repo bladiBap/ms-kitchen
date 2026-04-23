@@ -8,7 +8,7 @@ import { OrderDTO } from '@application/order/dto/OrderDTO';
 import { GetOrderByDay } from '@application/order/queries/GetOrderByDayQuery';
 import { OrderDTOMapper } from '@application/order/queries/mappers/OrderDTOMapper';
 
-import { OrderEntity } from '@infrastructure/persistence/entities/Order';
+import { OrderEntity } from '@infrastructure/persistence/entities/OrderEntity';
 import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 @injectable()

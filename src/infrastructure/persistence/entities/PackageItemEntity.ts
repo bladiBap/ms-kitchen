@@ -1,13 +1,13 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, PrimaryColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 
-import { PackageEntity } from './Package';
-import { RecipeEntity } from './Recipe';
+import { PackageEntity } from './PackageEntity';
+import { RecipeEntity } from './RecipeEntity';
 
 @Entity({
 	name: 'package_item'
 })
 export class PackageItemEntity {
-    @PrimaryGeneratedColumn()
+    @PrimaryColumn('uuid')
     	id!: string;
 
     @Column()

@@ -1,11 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { IngredientEntity } from './Ingredient';
+import { Entity, PrimaryColumn, Column, OneToMany } from 'typeorm';
+import { IngredientEntity } from './IngredientEntity';
 
 @Entity({
 	name: 'measurement_unit'
 })
 export class MeasurementUnitEntity {
-    @PrimaryGeneratedColumn()
+	@PrimaryColumn('uuid')
     	id!: string;
 
     @Column()

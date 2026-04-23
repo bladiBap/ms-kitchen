@@ -5,7 +5,7 @@ import { Address } from '@domain/address/entities/Address';
 import { DateUtils } from '@shared/utils/Date';
 import { IAddressRepository } from '@domain/address/repositories/IAddressRepository';
 
-import { AddressEntity } from '@infrastructure/persistence/entities/Address';
+import { AddressEntity } from '@infrastructure/persistence/entities/AddressEntity';
 import { AddressMapper } from '@infrastructure/persistence/mappers/AddressMapper';
 import { RecipeByClientDTO } from '@application/order/dto/RecipeByClientDTO';
 
@@ -54,7 +54,7 @@ export class AddressRepository implements IAddressRepository {
                 COUNT(ddr."recipeId") AS "quantity"
             FROM "address" a
             INNER JOIN "calendar" cal ON cal."id" = a."calendarId"
-            INNER JOIN "meal_plan" mp ON mp."calendarId" = cal."id"
+            INNER JOIN "meal_plan" mp ON mp."id" = cal."mealPlanId"
             INNER JOIN "client" c ON c."id" = mp."clientId"
             INNER JOIN "dayli_diet" dd ON dd."mealPlanId" = mp."id"
             INNER JOIN "dayli_diet_recipes" ddr ON ddr."dayliDietId" = dd."id"
@@ -95,7 +95,7 @@ export class AddressRepository implements IAddressRepository {
                 r."id"   AS "recipeId"
             FROM "address" a
             INNER JOIN "calendar" cal ON cal."id" = a."calendarId"
-            INNER JOIN "meal_plan" mp ON mp."calendarId" = cal."id"
+            INNER JOIN "meal_plan" mp ON mp."id" = cal."mealPlanId"
             INNER JOIN "client" c ON c."id" = mp."clientId"
             INNER JOIN "dayli_diet" dd ON dd."mealPlanId" = mp."id"
             INNER JOIN "dayli_diet_recipes" ddr ON ddr."dayliDietId" = dd."id"
@@ -103,6 +103,7 @@ export class AddressRepository implements IAddressRepository {
             WHERE a."date"::date = $1
                 AND mp."startDate" <= $1::date
                 AND mp."endDate" >= $1::date
+				AND a."needsDelivery" = true
             ORDER BY c."name", r."name";
             `,
 			[formattedDate]
