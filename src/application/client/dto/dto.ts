@@ -1,10 +1,10 @@
 export interface IRecipeDTO {
-    id: number;
+    id: string;
     name: string;
 }
 
 export interface IAddressDTO {
-    id: number;
+    id: string;
     address: string;
     reference: string;
     latitude: number;
@@ -12,7 +12,7 @@ export interface IAddressDTO {
 }
 
 export interface IClientDeliveredDTO {
-    id: number;
+    id: string;
     clientName: string;
     address: IAddressDTO;
     recipes: IRecipeDTO[];

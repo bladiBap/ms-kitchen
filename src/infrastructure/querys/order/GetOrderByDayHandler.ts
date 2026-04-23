@@ -5,20 +5,20 @@ import { ResultWithValue } from '@core/results/Result';
 import { IRequestHandler } from '@core/interfaces/IRequestHandler';
 
 import { OrderDTO } from '@application/order/dto/OrderDTO';
-import { GetOrderByDay } from '@application/order/queries/GetOrderByDayQuery';
+import { GetOrderByDayQuery } from '@application/order/queries/GetOrderByDayQuery';
 import { OrderDTOMapper } from '@application/order/queries/mappers/OrderDTOMapper';
 
 import { OrderEntity } from '@infrastructure/persistence/entities/OrderEntity';
 import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 @injectable()
-export class GetOrderByDayHandler implements  IRequestHandler<GetOrderByDay, ResultWithValue<OrderDTO>> {
+export class GetOrderByDayHandler implements  IRequestHandler<GetOrderByDayQuery, ResultWithValue<OrderDTO>> {
 
 	constructor(
         @inject(AppDataSourceToken) private readonly dataSource: DataSource
 	) {}
 
-	async handle(query: GetOrderByDay): Promise< ResultWithValue<OrderDTO>> {
+	async handle(query: GetOrderByDayQuery): Promise< ResultWithValue<OrderDTO>> {
 
 		const orderTable = this.dataSource.getRepository(OrderEntity);
 		const date = DateUtils.formatDate(query.date);

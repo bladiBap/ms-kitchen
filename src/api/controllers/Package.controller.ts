@@ -14,7 +14,7 @@ import { OrderDTO } from '@application/order/dto/OrderDTO';
 import { IncreaseQuantityOrderItemCommand } from '@application/order/commands/increaseQuantityOrderItem/IncreaseQuantityOrderItemCommand';
 
 @injectable()
-export class OrderController extends BaseController {
+export class PackageController extends BaseController {
 	constructor(
 		@inject(Mediator) private readonly mediator: IMediator,
 	) {
