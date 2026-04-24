@@ -37,3 +37,28 @@ export function Transactional() {
 		return descriptor;
 	};
 }
+
+/**
+ *	Decorador para manejar transacciones en event handlers.
+ *	Inicia una transacción antes de ejecutar el handler, y luego hace commit o rollback dependiendo del resultado.
+ * @returns Un descriptor de método modificado para manejar transacciones en event handlers.
+ */
+export function TransactionalEventHandler() {
+	return function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+		const originalMethod = descriptor.value;
+
+		descriptor.value = async function (...args: any[]) {
+			const uow = container.resolve<IUnitOfWork>(IUnitOfWorkToken);
+			await uow.start();
+			try {
+				await originalMethod.apply(this, args);
+				await uow.commit();
+			} catch (error) {
+				console.error('\x1b[31m%s\x1b[0m', 'Error en el event handler, aplicando rollback:', error);
+				await uow.rollback();
+			}
+		};
+
+		return descriptor;
+	};
+}

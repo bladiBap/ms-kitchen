@@ -19,6 +19,7 @@ export class OrderDTOMapper {
 					ingredients: item.recipe.ingredients.map(ri => ({
 						id: ri.ingredient.id,
 						name: ri.ingredient.name,
+						quantity: ri.quantity,
 						measurementUnit: {
 							id: ri.ingredient.measurementUnit.id,
 							name: ri.ingredient.measurementUnit.name,

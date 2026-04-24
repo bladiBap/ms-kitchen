@@ -30,6 +30,9 @@ import { PackageRepository } from '@infrastructure/persistence/repositories/Pack
 import { GetAddressByIdQuery } from '@application/address/query/GetAddressByIdQuery';
 import { GetAddressByIdHandler } from '@infrastructure/querys/address/GetAddressByIdHandler';
 
+import { GetOrderByDayHandler } from '@infrastructure/querys/order/GetOrderByDayHandler';
+import { GetOrderByDayQuery } from '@application/order/queries/GetOrderByDayQuery';
+
 import { GetClientsForDeliveredQuery } from '@application/client/query/getClientsForDelivery/GetClientsForDeliveredQuery';
 import { GetClientsForDeliveredHandler } from '@infrastructure/querys/client/GetClientsForDeliveredHandler';
 
@@ -62,7 +65,7 @@ container.register(IPackageRepositoryToken, { useClass: PackageRepository });
 container.register(GetAddressByIdQuery.name, { useClass: GetAddressByIdHandler });
 container.register(GetClientsForDeliveredQuery.name, { useClass: GetClientsForDeliveredHandler });
 container.register(GetPackagesByOrderQuery.name, { useClass: GetPackagesByOrderHandler });
-
+container.register(GetOrderByDayQuery.name, { useClass: GetOrderByDayHandler });
 //Integration Events
 container.register(ClientCreatedCommand.name, { useClass: ClientCreatedHandler });
 

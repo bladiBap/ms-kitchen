@@ -32,7 +32,7 @@ export class GenerateOrderHandler implements IRequestHandler<GenerateOrderComman
 		const date = generateOrderCommand.date;
 		const order = await this.orderRepository.findByDate(date);
 		if (order) {
-			return Result.failure(Exception.Conflict('Order.AlreadyExists', 'An order for today already exists'));
+			return Result.failure(Exception.Conflict('Order.AlreadyExists', 'An order already exists for the given date'));
 		}
 
 		const newOrder = Order.createNew(date, date, StatusOrder.CREATED);

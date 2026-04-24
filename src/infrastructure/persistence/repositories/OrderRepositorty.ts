@@ -8,6 +8,7 @@ import { IOrderRepository } from '@domain/order/repositories/IOrderRepository';
 
 import { OrderEntity } from '@infrastructure/persistence/entities/OrderEntity';
 import { OrderMapper } from '@infrastructure/persistence/mappers/OrderMapper';
+import { DomainEventsCollector } from '@application/DomainEventsCollector';
 
 @injectable()
 export class OrderRepository implements IOrderRepository {
@@ -26,6 +27,7 @@ export class OrderRepository implements IOrderRepository {
 		const manager = this.emProvider.getManager();
 		const orderEntity = OrderMapper.toPersistence(entity);
 		const savedOrder = await manager.getRepository(OrderEntity).save(orderEntity);
+		DomainEventsCollector.collect(entity.getDomainEvents());
 		return OrderMapper.toDomain(savedOrder);
 	}
 
@@ -44,7 +46,6 @@ export class OrderRepository implements IOrderRepository {
 	async findByDate(date: Date): Promise<Order | null> {
 		const manager = this.emProvider.getManager();
 		const formattedDate = DateUtils.formatDate(date);
-
 		const order = await manager.getRepository(OrderEntity).findOne({
 			where: { dateOrdered: formattedDate }
 		});

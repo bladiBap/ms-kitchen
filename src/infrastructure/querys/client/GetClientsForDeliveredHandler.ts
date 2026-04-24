@@ -21,9 +21,8 @@ export class GetClientsForDeliveredHandler implements IRequestHandler<GetClients
 	async handle(request: GetClientsForDeliveredQuery): Promise<ResultWithValue<IClientDeliveredDTO[]>> {
 		const addressTable = this.dataSource.getRepository(AddressEntity);
 
-		const date = DateUtils.formatDate(request.date);
 		const clientsToDelivered = await addressTable.find({
-			where: { date: date },
+			where: { date: request.date, needsDelivery: true },
 			relations: [
 				'calendar',
 				'calendar.mealPlan',

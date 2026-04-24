@@ -29,7 +29,7 @@ import { OrderItemCompletedEvent } from '@domain/order/events/OrderItemCompleted
 import { OrderItemCompletedEventHandler } from '@application/order/events/OrderItemCompletedEventHandler';
 
 import { OrderCompletedEvent } from '@domain/order/events/OrderCompletedEvent';
-import { CreatePackageEventHandler } from '@application/package/events/CreatePackageEventHandler';
+import { PackageCreateEventHandler } from '@application/package/events/PackageCreateEventHandler';
 
 container.register(CreateAddressCommand.name, {
 	useClass: CreateAddressHandler,
@@ -72,5 +72,5 @@ container.register(OrderItemCompletedEvent.name, {
 });
 
 container.register(OrderCompletedEvent.name, {
-	useClass: CreatePackageEventHandler,
+	useClass: PackageCreateEventHandler,
 });

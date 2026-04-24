@@ -23,6 +23,7 @@ export interface RecipeDTO {
 export interface IngredientDTO {
     id: string;
     name: string;
+	quantity: number;
     measurementUnit: MeasurementUnitDTO;
 }
 

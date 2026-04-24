@@ -30,4 +30,11 @@ export class OrderError {
 			`Cannot mark order with id ${id} as completed because not all order items are completed.`
 		);
 	}
+
+	public static orderItemNotFound(recipeId: string): Exception {
+		return Exception.NotFound(
+			'OrderError.orderItemNotFound',
+			`Order item with recipe id ${recipeId} not found in the order.`
+		);
+	}
 }

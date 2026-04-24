@@ -112,27 +112,21 @@ export class AddressRepository implements IAddressRepository {
 
 	async getAddressByDateAndClientId(clientId: string, date: Date): Promise<Address | null> {
 
-		const start = new Date(date);
-		start.setHours(0, 0, 0, 0);
-
-		const end = new Date(date);
-		end.setHours(23, 59, 59, 999);
-
 		const manager = this.emProvider.getManager();
 
-		const addressRaw = await manager
+		const addressEntity = await manager
 			.getRepository(AddressEntity)
 			.createQueryBuilder('a')
 			.innerJoin('a.calendar', 'cal')
 			.innerJoin('cal.mealPlan', 'mp')
 			.where('mp.clientId = :clientId', { clientId })
-			.andWhere('a.date::date >= :start AND a.date::date < :end', { start: start.toISOString(), end: end.toISOString() })
+			.andWhere('a.date = :dateOrder', { dateOrder: date })
 			.orderBy('a.date', 'DESC')
 			.getOne();
 
-		if (addressRaw === null) {return null;}
+		if (addressEntity === null) {return null;}
 
-		return AddressMapper.toDomain(addressRaw);
+		return AddressMapper.toDomain(addressEntity);
 	}
 
 	async update(address: Address): Promise<Address> {

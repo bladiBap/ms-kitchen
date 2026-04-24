@@ -1,5 +1,5 @@
-import { PackageCompleted } from '@domain/package/events/PackageCompleted';
+import { PackageCompletedOutboxMessage } from '@domain/package/events/outbox/PackageCompletedOutboxMessage';
 
 export const EventMap: Record<string, any> = {
-	'PackageCompleted': PackageCompleted,
+	'PackageCompleted': PackageCompletedOutboxMessage,
 };

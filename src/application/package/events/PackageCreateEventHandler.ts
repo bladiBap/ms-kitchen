@@ -1,7 +1,7 @@
 import { injectable, inject } from 'tsyringe';
 import { CodeGenerator } from '@shared/utils/Code';
 import { IEventDomainHandler } from '@core/interfaces/IEventDomainHandler';
-import { Transactional } from '@application/common/decorator/Transactional';
+import { TransactionalEventHandler } from '@application/common/decorator/Transactional';
 
 import { Package } from '@domain/package/entities/Package';
 import { PackageItem } from '@domain/package/entities/PackageItem';
@@ -12,7 +12,7 @@ import { IPackageRepository, IPackageRepositoryToken } from '@domain/package/rep
 import { IDailyAllocationRepository, IDailyAllocationRepositoryToken } from '@domain/daily-allocation/repositories/IDailyAllocationRepository';
 
 @injectable()
-export class CreatePackageEventHandler implements IEventDomainHandler<OrderCompletedEvent> {
+export class PackageCreateEventHandler implements IEventDomainHandler<OrderCompletedEvent> {
 
 	constructor(
 		@inject(IPackageRepositoryToken) private readonly packageRepository: IPackageRepository,
@@ -21,7 +21,7 @@ export class CreatePackageEventHandler implements IEventDomainHandler<OrderCompl
 	) {
 	}
 
-	@Transactional()
+	@TransactionalEventHandler()
 	async handle(command: OrderCompletedEvent): Promise<void> {
 		const { orderId, dateOrder } = command;
 

@@ -75,9 +75,14 @@ export class OrderItem extends Entity{
 		this.quantityPrepared = newQuantityPrepared;
 	}
 
-	public updateQuantityDelivered(newQuantityDelivered: number) : void {
+	public increaseQuantityDelivered(quantityToIncrement: number) : void {
+		if (quantityToIncrement <= 0) {
+			throw new DomainException(OrderItemError.quantityMustBeGreaterThanZero(quantityToIncrement));
+		}
+
+		const newQuantityDelivered = this.quantityDelivered + quantityToIncrement;
 		if (newQuantityDelivered > this.quantityPrepared) {
-			throw new DomainException( OrderItemError.quantityPreparedExceedsPlanned(newQuantityDelivered, this.quantityPrepared) );
+			throw new DomainException( OrderItemError.quantityDeliveredExceedsPrepared(newQuantityDelivered, this.quantityPrepared) );
 		}
 		this.quantityDelivered = newQuantityDelivered;
 	}

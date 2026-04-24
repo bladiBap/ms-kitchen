@@ -2,20 +2,20 @@ import { inject, injectable } from 'tsyringe';
 import { IEventDomainHandler } from '@core/interfaces/IEventDomainHandler';
 import { EventHandlerOutbox } from '@shared/registry/Decorators';
 
-import { PackageCompleted } from '@domain/package/events/PackageCompleted';
+import { PackageCompletedOutboxMessage } from '@domain/package/events/outbox/PackageCompletedOutboxMessage';
 import { OutboxMessage } from '@outbox/model/OutboxMessage';
 import { IExternalPublisher, IExternalPublisherToken } from '@comunication/contracts/services/IExternalPublisher';
 import { PackageCompletedIntegration } from '@/integration/paquete/PackageCreated';
 
-export class PackageCompletedOutbox extends OutboxMessage<PackageCompleted> {
-	constructor(content: PackageCompleted) {
+export class PackageCompletedOutbox extends OutboxMessage<PackageCompletedOutboxMessage> {
+	constructor(content: PackageCompletedOutboxMessage) {
 		super(content);
 	}
 }
 
 @injectable()
-@EventHandlerOutbox(PackageCompletedOutbox, PackageCompleted)
-export class PackageCompletedHandler implements IEventDomainHandler<OutboxMessage<PackageCompleted>> {
+@EventHandlerOutbox(PackageCompletedOutbox, PackageCompletedOutboxMessage)
+export class PackageCompletedHandler implements IEventDomainHandler<OutboxMessage<PackageCompletedOutboxMessage>> {
 
 	private readonly eventType = 'orders';
 	private readonly _externalPublisher: IExternalPublisher;
@@ -26,7 +26,7 @@ export class PackageCompletedHandler implements IEventDomainHandler<OutboxMessag
 		this._externalPublisher = externalPublisher;
 	}
 
-	async handle(message: OutboxMessage<PackageCompleted>): Promise<void> {
+	async handle(message: OutboxMessage<PackageCompletedOutboxMessage>): Promise<void> {
 
 		const domainEvent = message.content;
 		const packageCompleted : PackageCompletedIntegration = new PackageCompletedIntegration(

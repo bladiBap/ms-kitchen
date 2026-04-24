@@ -6,6 +6,7 @@ import { DomainEvent } from '@core/abstraction/DomainEvent';
 import { OutboxMessage } from '@outbox/model/OutboxMessage';
 import { HandlerRegistry } from '@shared/registry/HandlerRegistry';
 import { IEventHandlerOutbox } from '@core/interfaces/IEventHandlerOutbox';
+import { IEventDomainHandler } from '@core/interfaces/IEventDomainHandler';
 
 @singleton()
 export class Mediator implements IMediator {
@@ -16,19 +17,9 @@ export class Mediator implements IMediator {
 	}
 
 	async publish(event: DomainEvent): Promise<void> {
-		const handlerTypes = HandlerRegistry.resolveMany(event.constructor);
-		if (handlerTypes.length === 0) {return;}
-
-		const handlers = handlerTypes.map((t) => container.resolve(t));
-		const tasks = handlers.map((h) => h.handle(event));
-
-		const results = await Promise.allSettled(tasks);
-
-		results.forEach((r, i) => {
-			if (r.status === 'rejected') {
-				throw new Error(`Error in event handler ${handlerTypes[i]?.name}: ${r.reason}`);
-			}
-		});
+		const token = event.constructor.name;
+		const handler = container.resolve<IEventDomainHandler<DomainEvent>>(token);
+		return await handler.handle(event);	
 	}
 
 	async publishOutboxMessage<TEvent extends DomainEvent>(message: OutboxMessage<TEvent>): Promise<void> {

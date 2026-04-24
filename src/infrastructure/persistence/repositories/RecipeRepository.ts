@@ -31,8 +31,7 @@ export class RecipeRepository implements IRecipeRepository {
 
 	async getRecipesToPrepare(date: Date): Promise<RecipeToPrepareDTO[]> {
 		const manager = this.emProvider.getManager();
-
-		date.setHours(0, 0, 0, 0);
+		const dateStr = date.toISOString().split('T')[0];
 
 		const result: RecipeToPrepareDTO[] = await manager.query(`
             SELECT
@@ -46,7 +45,7 @@ export class RecipeRepository implements IRecipeRepository {
             WHERE a."date" = $1 AND dd."date" = $1
                 AND $1::date BETWEEN mp."startDate" AND mp."endDate" AND a."needsDelivery" = true
             GROUP BY ddr."recipeId"; `,
-		[date]
+			[dateStr]
 		);
 
 		return result;

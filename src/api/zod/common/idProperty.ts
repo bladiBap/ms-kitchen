@@ -1,4 +1,4 @@
-import { coerce } from "zod";
+import { coerce } from 'zod';
 
 export const idProperty = (nombre: string) => {
 	return coerce

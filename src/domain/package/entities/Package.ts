@@ -5,6 +5,7 @@ import { AggregateRoot } from '@core/abstraction/AgregateRoot';
 import { StatusPackage } from '@domain/package/types/StatusPackage';
 import { PackageError } from '@domain/package/errors/PackageError';
 import { PackageItem } from '@domain/package/entities/PackageItem';
+import { PackageCompletedEvent } from '@domain/package/events/PackageCompletedEvent';
 
 export class Package extends AggregateRoot {
 	private orderId: string;
@@ -42,11 +43,12 @@ export class Package extends AggregateRoot {
 		this.listPackageItems.push(packageItem);
 	}
 
-	public 	(): void {
+	public changeToCompleted(): void {
 		if (this.statusPackage !== StatusPackage.CREATED) {
 			throw new DomainException( PackageError.canNotChangeStatus(this.statusPackage, StatusPackage.COMPLETED) );
 		}
 		this.statusPackage = StatusPackage.COMPLETED;
+		this.addDomainEvent(new PackageCompletedEvent(this.orderId, this.id));
 	}
 
 	public getOrderId(): string {

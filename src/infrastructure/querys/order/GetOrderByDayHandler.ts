@@ -1,6 +1,5 @@
 import { DataSource } from 'typeorm';
 import { inject, injectable } from 'tsyringe';
-import { DateUtils } from '@shared/utils/Date';
 import { ResultWithValue } from '@core/results/Result';
 import { IRequestHandler } from '@core/interfaces/IRequestHandler';
 
@@ -21,7 +20,7 @@ export class GetOrderByDayHandler implements  IRequestHandler<GetOrderByDayQuery
 	async handle(query: GetOrderByDayQuery): Promise< ResultWithValue<OrderDTO>> {
 
 		const orderTable = this.dataSource.getRepository(OrderEntity);
-		const date = DateUtils.formatDate(query.date);
+		const date = query.date;
 
 		const order = await orderTable.findOne({
 			where: { dateOrdered: date },

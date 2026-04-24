@@ -72,11 +72,10 @@ export class DailyAllocationRepository implements IDailyAllocationRepository {
 	}
 
 	async getDailyAllocation(clientId: string, date: Date): Promise<DailyAllocation | null> {
-		const formattedDate = DateUtils.formatDate(date);
 		const manager = this.emProvider.getManager();
 		const dailyAllocationEntity = await manager.getRepository(DailyAllocationEntity).findOne({
 			where: {
-				date: formattedDate,
+				date: date,
 				lines: {
 					clientId: clientId
 				}
@@ -98,14 +97,13 @@ export class DailyAllocationRepository implements IDailyAllocationRepository {
 	}
 
 	async getClientsIdsByDate(date: Date): Promise<string[]> {
-		const formattedDate = DateUtils.formatDate(date);
 		const manager = this.emProvider.getManager();
 		const result = await manager.query(`
 			SELECT DISTINCT l."clientId"
 			FROM "daily_allocation" da
 			INNER JOIN "allocation_line" l ON l."allocationId" = da."id"
-			WHERE da."date" = $1;
-		`, [formattedDate]);
+			WHERE da."date"::date = $1;
+		`, [date]);
 
 		return result.map((row: { clientId: string }) => row.clientId);
 	}

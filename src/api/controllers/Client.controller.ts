@@ -16,10 +16,9 @@ export class ClientController extends BaseController {
 		super();
 	}
 
-	async getDeliveryInformation(req: Request, res: Response<ResultWithValue<IClientDeliveredDTO[]>>) {
-		const { date } = req.body;
-		const dateObj = new Date(date);
-		const result = await this.mediator.send(new GetClientsForDeliveredQuery(dateObj));
+	async getDeliveryInformation(req: Request<any, any, any, { date: Date }>, res: Response<ResultWithValue<IClientDeliveredDTO[]>>) {
+		const { date } = req.query;
+		const result = await this.mediator.send(new GetClientsForDeliveredQuery(date as Date));
 		return this.handlerResponse(res, result);
 	}
 }

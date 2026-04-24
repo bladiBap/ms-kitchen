@@ -18,7 +18,7 @@ import { PackageItem } from '@domain/package/entities/PackageItem';
 import { Address } from '@domain/address/entities/Address';
 import { Client } from '@domain/client/entities/Client';
 import { StatusPackage } from '@domain/package/types/StatusPackage';
-import { PackageCompleted } from '@domain/package/events/PackageCompleted';
+import { PackageCompletedOutboxMessage } from '@domain/package/events/outbox/PackageCompletedOutboxMessage';
 import { IPackageRepository, IPackageRepositoryToken } from '@domain/package/repositories/IPackageRepository';
 import { IClientRepository, IClientRepositoryToken } from '@domain/client/repositories/IClientRepository';
 import { IAddressRepository, IAddressRepositoryToken } from '@domain/address/repositories/IAddressRepository';
@@ -37,7 +37,7 @@ export class CreatePackageHandler implements IRequestHandler<CreatePackageComman
 	}
 
 	async addOutboxMessage(client: Client, address: Address ): Promise<void> {
-		const packageCompletedEvent = new PackageCompleted(
+		const packageCompletedEvent = new PackageCompletedOutboxMessage(
 			randomUUID(),
 			new Date(),
 			address.getStreet() + ' ' + address.getReference(),
@@ -60,7 +60,7 @@ export class CreatePackageHandler implements IRequestHandler<CreatePackageComman
 		const outboxMessage : OutboxMessage<DomainEvent> = new OutboxMessage<DomainEvent>(
 			packageCompletedEvent
 		);
-		await this._outboxService.addAsync(outboxMessage);
+		await this._outboxService.create(outboxMessage);
 	}
 
 	@Transactional()

@@ -23,8 +23,7 @@ export class OrderController extends BaseController {
 
 	async create(req: Request, res: Response<Result>) {
 		const { date } = req.body;
-		const dateObj = new Date(date);
-		const result = await this.mediator.send(new GenerateOrderCommand(dateObj));
+		const result = await this.mediator.send(new GenerateOrderCommand(date as Date));
 		return this.handlerResponse(res, result);
 	}
 
@@ -34,10 +33,9 @@ export class OrderController extends BaseController {
 		return this.handlerResponse(res, result);
 	}
 
-	async getByDay (req: Request, res: Response<ResultWithValue<OrderDTO>>) {
-		const { date } = req.body;
-		const dateObj = new Date(date);
-		const result = await this.mediator.send(new GetOrderByDayQuery(dateObj));
+	async getByDay (req: Request<any, any, any, { date: Date }>, res: Response<ResultWithValue<OrderDTO>>) {
+		const { date } = req.query;
+		const result = await this.mediator.send(new GetOrderByDayQuery(date as Date));
 		return this.handlerResponse(res, result);
 	}
 

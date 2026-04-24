@@ -14,4 +14,8 @@ export class OrderItemError {
 	public static quantityPreparedExceedsPlanned( quantityPrepared: number, quantityPlanned: number ) : Exception {
 		return Exception.ValidationError(`The prepared quantity (${quantityPrepared}) exceeds the planned quantity (${quantityPlanned}).`);
 	}
+
+	public static quantityDeliveredExceedsPrepared( quantityDelivered: number, quantityPrepared: number ) : Exception {
+		return Exception.ValidationError(`The delivered quantity (${quantityDelivered}) exceeds the prepared quantity (${quantityPrepared}).`);
+	}
 }

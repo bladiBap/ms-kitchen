@@ -44,6 +44,14 @@ export class Order extends AggregateRoot {
 		return this.listOrderItems.every(item => item.getStatus() === StatusOrder.COMPLETED);
 	}
 
+	public changeQuantityDelivered(recipeId: string, quantityToIncrement: number) : void {
+		const item = this.listOrderItems.find(item => item.getRecipeId() === recipeId);
+		if (!item) {
+			throw new DomainException( OrderError.orderItemNotFound(recipeId) );
+		}
+		item.increaseQuantityDelivered(quantityToIncrement);
+	}
+
 	public isStatusCompleted (): boolean{
 		return this.status === StatusOrder.COMPLETED;
 	}

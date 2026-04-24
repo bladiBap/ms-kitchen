@@ -7,11 +7,9 @@ import { Result, ResultWithValue } from '@core/results/Result';
 import { Mediator } from '@shared/mediator/Mediator';
 
 
-import { GenerateOrderCommand } from '@application/order/commands/generateOrder/GenerateOrderCommand';
-import { GetOrderByIdQuery } from '@application/order/queries/GetOrderByIdQuery';
-import { GetOrderByDayQuery } from '@application/order/queries/GetOrderByDayQuery';
-import { OrderDTO } from '@application/order/dto/OrderDTO';
-import { IncreaseQuantityOrderItemCommand } from '@application/order/commands/increaseQuantityOrderItem/IncreaseQuantityOrderItemCommand';
+import { PackageDTO } from '@application/package/dto/PackageDTO';
+import { GetPackagesByOrderQuery } from '@application/package/queries/getPackagesByOrderQuery/GetPackagesByOrderQuery';
+import { CompletePackageCommand } from '@application/package/commands/completePackage/CompletePackageCommand';
 
 @injectable()
 export class PackageController extends BaseController {
@@ -21,30 +19,15 @@ export class PackageController extends BaseController {
 		super();
 	}
 
-	async create(req: Request, res: Response<Result>) {
-		const { date } = req.body;
-		const dateObj = new Date(date);
-		const result = await this.mediator.send(new GenerateOrderCommand(dateObj));
+	async getByOrderId(req: Request<{ orderId: string }>, res: Response<ResultWithValue<PackageDTO[]>>) {
+		const { orderId } = req.params;
+		const result = await this.mediator.send(new GetPackagesByOrderQuery(orderId));
 		return this.handlerResponse(res, result);
 	}
 
-	async getById (req: Request<{ id: string }>, res: Response<ResultWithValue<OrderDTO>>) {
-		const { id } = req.params;
-		const result = await this.mediator.send(new GetOrderByIdQuery(id));
-		return this.handlerResponse(res, result);
-	}
-
-	async getByDay (req: Request, res: Response<ResultWithValue<OrderDTO>>) {
-		const { date } = req.body;
-		const dateObj = new Date(date);
-		const result = await this.mediator.send(new GetOrderByDayQuery(dateObj));
-		return this.handlerResponse(res, result);
-	}
-
-	async markOrderItemAsReady (req: Request<{ orderItemId: string }, any, { quantity: number }>, res: Response<Result>) {
-		const { orderItemId } = req.params;
-		const { quantity } = req.body;
-		const result = await this.mediator.send(new IncreaseQuantityOrderItemCommand(orderItemId, quantity));
+	async completePackage(req: Request<{ packageId: string }>, res: Response<Result>) {
+		const { packageId } = req.params;
+		const result = await this.mediator.send(new CompletePackageCommand(packageId));
 		return this.handlerResponse(res, result);
 	}
 }

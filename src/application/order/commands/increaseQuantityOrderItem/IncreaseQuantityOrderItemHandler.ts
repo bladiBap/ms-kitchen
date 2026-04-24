@@ -6,9 +6,10 @@ import { IOrderRepository, IOrderRepositoryToken } from '@domain/order/repositor
 import { IOrderItemRepository, IOrderItemRepositoryToken } from '@domain/order/repositories/IOrderItemRepository';
 import { IncreaseQuantityOrderItemCommand } from '@application/order/commands/increaseQuantityOrderItem/IncreaseQuantityOrderItemCommand';
 import { Transactional } from '@application/common/decorator/Transactional';
+import { IRequestHandler } from '@core/interfaces/IRequestHandler';
 
 @injectable()
-export class IncreaseQuantityOrderItemHandler {
+export class IncreaseQuantityOrderItemHandler implements IRequestHandler<IncreaseQuantityOrderItemCommand, Result> {
 
 	constructor(
         @inject(IOrderRepositoryToken) private readonly orderRepository: IOrderRepository,
@@ -16,7 +17,7 @@ export class IncreaseQuantityOrderItemHandler {
 	) {}
 
 	@Transactional()
-	async execute(command: IncreaseQuantityOrderItemCommand): Promise<Result> {
+	async handle(command: IncreaseQuantityOrderItemCommand): Promise<Result> {
 		const orderItem = await this.orderItemRepository.getById(command.orderItemId);
 
 		if (!orderItem) {

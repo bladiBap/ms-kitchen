@@ -6,6 +6,7 @@ import { IPackageRepository } from '@domain/package/repositories/IPackageReposit
 
 import { PackageMapper } from '@infrastructure/persistence/mappers/PackageMapper';
 import { PackageEntity } from '@infrastructure/persistence/entities/PackageEntity';
+import { StatusPackage } from '@domain/package/types/StatusPackage';
 
 @injectable()
 export class PackageRepository implements IPackageRepository {
@@ -58,5 +59,16 @@ export class PackageRepository implements IPackageRepository {
 		});
 		if (!packageD) {return null;}
 		return PackageMapper.toDomain(packageD);
+	}
+
+	async isCompleteAllPackagesByOrderId(orderId: string): Promise<boolean> {
+		const manager = this.emProvider.getManager();
+		const count = await manager.getRepository(PackageEntity).count({
+			where: {
+				orderId,
+				status: StatusPackage.COMPLETED
+			}
+		});
+		return count === 0;
 	}
 }

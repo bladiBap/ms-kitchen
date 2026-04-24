@@ -13,7 +13,7 @@ export class OutboxService<TContent> implements IOutboxService<TContent>, IOutbo
         @inject('IOutboxDatabase')private readonly IOutboxDatabase: IOutboxDatabase
 	){}
 
-	async addAsync(message: OutboxMessage<TContent>): Promise<void> {
+	async create(message: OutboxMessage<TContent>): Promise<void> {
 		const entity = OutboxMapper.toEntity(message);
 		const manager = this.IOutboxDatabase.getManager();
 		await manager.getRepository(OutboxMessageEntity).save(entity);

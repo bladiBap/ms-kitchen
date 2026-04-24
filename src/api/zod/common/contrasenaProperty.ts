@@ -1,4 +1,4 @@
-import { string } from "zod";
+import { string } from 'zod';
 
 export const contrasenaProperty = string()
 	.trim()
@@ -6,6 +6,6 @@ export const contrasenaProperty = string()
 	.max(100)
 	.regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/, {
 		message:
-			"La contraseña debe contener al menos una letra mayúscula," +
-			" una letra minúscula, un número y un carácter especial (@$!%*?&)",
+			'La contraseña debe contener al menos una letra mayúscula,' +
+			' una letra minúscula, un número y un carácter especial (@$!%*?&)',
 	});
