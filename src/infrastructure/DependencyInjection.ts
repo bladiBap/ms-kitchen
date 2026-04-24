@@ -32,6 +32,10 @@ import { GetAddressByIdHandler } from '@infrastructure/querys/address/GetAddress
 
 import { GetOrderByDayHandler } from '@infrastructure/querys/order/GetOrderByDayHandler';
 import { GetOrderByDayQuery } from '@application/order/queries/GetOrderByDayQuery';
+import { GetOrderByIdQuery } from '@application/order/queries/GetOrderByIdQuery';
+import { GetOrderByIdHandler } from '@infrastructure/querys/order/GetOrderByIdHandler';
+import { GetAllOrdersQuery } from '@application/order/queries/GetAllOrdersQuery';
+import { GetAllOrdersHandler } from '@infrastructure/querys/order/GetAllOrdersHandler';
 
 import { GetClientsForDeliveredQuery } from '@application/client/query/getClientsForDelivery/GetClientsForDeliveredQuery';
 import { GetClientsForDeliveredHandler } from '@infrastructure/querys/client/GetClientsForDeliveredHandler';
@@ -46,9 +50,18 @@ import { ClientCreatedHandler } from '@application/client/command/ClientCreatedH
 //Outbox
 import { IExternalPublisherToken } from '@comunication/contracts/services/IExternalPublisher';
 import { RabbitMQExternalPublisher } from '@comunication/rabbitMQ/services/RabbitMQExternalPublisher';
+import { IOutboxServiceToken } from '@outbox/service/interface/IOutboxService';
+import { OutboxService } from '@outbox/service/OutboxService';
+import { IOutboxDatabaseToken } from '@outbox/repository/IOutboxDatabase';
+import { IOutboxRepositoryToken } from '@outbox/repository/IOutboxRepository';
+import { RabbitMQSettings } from '@comunication/rabbitMQ/services/RabbitMQSetting';
+import { env } from '@shared/constants/env';
 
 container.registerSingleton(IUnitOfWorkToken, UnitOfWork);
 container.register(IEntityManagerProviderToken, {
+	useToken: IUnitOfWorkToken,
+});
+container.register(IOutboxDatabaseToken, {
 	useToken: IUnitOfWorkToken,
 });
 
@@ -66,8 +79,21 @@ container.register(GetAddressByIdQuery.name, { useClass: GetAddressByIdHandler }
 container.register(GetClientsForDeliveredQuery.name, { useClass: GetClientsForDeliveredHandler });
 container.register(GetPackagesByOrderQuery.name, { useClass: GetPackagesByOrderHandler });
 container.register(GetOrderByDayQuery.name, { useClass: GetOrderByDayHandler });
+container.register(GetOrderByIdQuery.name, { useClass: GetOrderByIdHandler });
+container.register(GetAllOrdersQuery.name, { useClass: GetAllOrdersHandler });
 //Integration Events
 container.register(ClientCreatedCommand.name, { useClass: ClientCreatedHandler });
 
 //Outbox
 container.registerSingleton(IExternalPublisherToken, RabbitMQExternalPublisher);
+container.registerSingleton(IOutboxServiceToken, OutboxService);
+container.register(IOutboxRepositoryToken, { useToken: IOutboxServiceToken });
+
+container.registerInstance(RabbitMQSettings, new RabbitMQSettings(
+	5672,
+	false,
+	env.RABBITMQ_HOST,
+	env.RABBITMQ_USERNAME,
+	env.RABBITMQ_PASSWORD,
+	env.RABBITMQ_VIRTUAL_HOST,
+));

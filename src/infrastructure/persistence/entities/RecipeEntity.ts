@@ -1,10 +1,10 @@
 import {
 	Entity, PrimaryColumn, Column,
-	OneToMany, ManyToMany
+	OneToMany
 } from 'typeorm';
 
 import { RecipeIngredientEntity } from './RecipeIngredientEntity';
-import { DayliDietEntity } from './DayliDietEntity';
+import { DayliDietRecipeEntity } from './DayliDietRecipeEntity';
 import { PackageItemEntity } from './PackageItemEntity';
 import { OrderItemEntity } from './OrderItemEntity';
 import { AllocationLineEntity } from './AllocationLineEntity';
@@ -34,7 +34,7 @@ export class RecipeEntity {
     @OneToMany(() => AllocationLineEntity, (allocationLine) => allocationLine.recipe)
     	allocationLines!: AllocationLineEntity[];
 
-    @ManyToMany(() => DayliDietEntity, (dayliDiet) => dayliDiet.recipes)
-    	dayliDiets!: DayliDietEntity[];
+	@OneToMany(() => DayliDietRecipeEntity, (dayliDietRecipe) => dayliDietRecipe.recipe)
+		dayliDietRecipes!: DayliDietRecipeEntity[];
 
 }

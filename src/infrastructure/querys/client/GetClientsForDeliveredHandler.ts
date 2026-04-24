@@ -1,6 +1,5 @@
 import { DataSource } from 'typeorm';
 import { injectable, inject } from 'tsyringe';
-import { DateUtils } from '@shared/utils/Date';
 import { ResultWithValue } from '@core/results/Result';
 import { IRequestHandler } from '@core/interfaces/IRequestHandler';
 
@@ -21,16 +20,18 @@ export class GetClientsForDeliveredHandler implements IRequestHandler<GetClients
 	async handle(request: GetClientsForDeliveredQuery): Promise<ResultWithValue<IClientDeliveredDTO[]>> {
 		const addressTable = this.dataSource.getRepository(AddressEntity);
 
-		const clientsToDelivered = await addressTable.find({
-			where: { date: request.date, needsDelivery: true },
-			relations: [
-				'calendar',
-				'calendar.mealPlan',
-				'calendar.mealPlan.client',
-				'calendar.mealPlan.dayliDiets',
-				'calendar.mealPlan.dayliDiets.recipes'
-			]
-		});
+		const clientsToDelivered = await addressTable.createQueryBuilder('address')
+			.leftJoinAndSelect('address.calendar', 'calendar')
+			.leftJoinAndSelect('calendar.mealPlan', 'mealPlan')
+			.leftJoinAndSelect('mealPlan.client', 'client')
+			.leftJoinAndSelect('mealPlan.dayliDiets', 'dayliDiets', 'dayliDiets.date = :targetDate', {
+				targetDate: request.date
+			})
+			.leftJoinAndSelect('dayliDiets.dayliDietRecipes', 'dietRecipes')
+			.leftJoinAndSelect('dietRecipes.recipe', 'recipe')
+			.where('address.date = :targetDate', { targetDate: request.date })
+			.andWhere('address.needsDelivery = :needsDelivery', { needsDelivery: true })
+			.getMany();
 		const listclientsToDeliveredList = ClientDeliveredDTOMapper.toDTO(clientsToDelivered);
 		return ResultWithValue.successWith<IClientDeliveredDTO[]>(listclientsToDeliveredList);
 	}

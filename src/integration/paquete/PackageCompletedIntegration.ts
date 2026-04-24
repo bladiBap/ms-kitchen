@@ -1,6 +1,6 @@
 import { IntegrationMessage } from '@comunication/contracts/message/IntegrationMessage';
 
-class DeliveryAddress {
+class DeliveryLocation {
 	latitude: string;
 	longitude: string;
 
@@ -25,16 +25,19 @@ export class PackageCompletedIntegration extends IntegrationMessage {
 
 	deliveryDate: Date;
 
-	deliveryAddress: DeliveryAddress;
+	deliveryLocation: DeliveryLocation;
+
+	deliveryAddress: string;
 
 	override createdAt: Date;
 
 	items: Item[];
 
-	constructor(customerId: string, deliveryDate: Date, deliveryAddress: DeliveryAddress, createdAt: Date, items: Item[]) {
+	constructor(customerId: string, deliveryDate: Date, deliveryLocation: DeliveryLocation, deliveryAddress: string, createdAt: Date, items: Item[]) {
 		super();
 		this.customerId = customerId;
 		this.deliveryDate = deliveryDate;
+		this.deliveryLocation = deliveryLocation;
 		this.deliveryAddress = deliveryAddress;
 		this.createdAt = createdAt;
 		this.items = items;

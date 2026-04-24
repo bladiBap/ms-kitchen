@@ -7,6 +7,7 @@ import { IPackageRepository } from '@domain/package/repositories/IPackageReposit
 import { PackageMapper } from '@infrastructure/persistence/mappers/PackageMapper';
 import { PackageEntity } from '@infrastructure/persistence/entities/PackageEntity';
 import { StatusPackage } from '@domain/package/types/StatusPackage';
+import { DomainEventsCollector } from '@application/DomainEventsCollector';
 
 @injectable()
 export class PackageRepository implements IPackageRepository {
@@ -34,6 +35,7 @@ export class PackageRepository implements IPackageRepository {
 		const manager = this.emProvider.getManager();
 		const packageEntity = PackageMapper.toPersistence(entity);
 		const saved = await manager.getRepository(PackageEntity).save(packageEntity);
+		DomainEventsCollector.collect(entity.getDomainEvents());
 		return PackageMapper.toDomain(saved);
 	}
 
@@ -62,13 +64,13 @@ export class PackageRepository implements IPackageRepository {
 	}
 
 	async isCompleteAllPackagesByOrderId(orderId: string): Promise<boolean> {
-		const manager = this.emProvider.getManager();
-		const count = await manager.getRepository(PackageEntity).count({
+		const repository = this.emProvider.getManager().getRepository(PackageEntity);
+		const hasPendingPackages = await repository.exists({
 			where: {
 				orderId,
-				status: StatusPackage.COMPLETED
+				status: StatusPackage.CREATED
 			}
 		});
-		return count === 0;
+		return !hasPendingPackages;
 	}
 }

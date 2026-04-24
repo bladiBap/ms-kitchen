@@ -8,10 +8,13 @@ import { Mediator } from '@shared/mediator/Mediator';
 
 
 import { GenerateOrderCommand } from '@application/order/commands/generateOrder/GenerateOrderCommand';
+import { GetAllOrdersQuery } from '@application/order/queries/GetAllOrdersQuery';
 import { GetOrderByIdQuery } from '@application/order/queries/GetOrderByIdQuery';
 import { GetOrderByDayQuery } from '@application/order/queries/GetOrderByDayQuery';
 import { OrderDTO } from '@application/order/dto/OrderDTO';
 import { IncreaseQuantityOrderItemCommand } from '@application/order/commands/increaseQuantityOrderItem/IncreaseQuantityOrderItemCommand';
+import { PackageDTO } from '@application/package/dto/PackageDTO';
+import { GetPackagesByOrderQuery } from '@application/package/queries/getPackagesByOrderQuery/GetPackagesByOrderQuery';
 
 @injectable()
 export class OrderController extends BaseController {
@@ -27,9 +30,20 @@ export class OrderController extends BaseController {
 		return this.handlerResponse(res, result);
 	}
 
+	async getAll(req: Request, res: Response<ResultWithValue<OrderDTO[]>>) {
+		const result = await this.mediator.send(new GetAllOrdersQuery());
+		return this.handlerResponse(res, result);
+	}
+
 	async getById (req: Request<{ id: string }>, res: Response<ResultWithValue<OrderDTO>>) {
 		const { id } = req.params;
 		const result = await this.mediator.send(new GetOrderByIdQuery(id));
+		return this.handlerResponse(res, result);
+	}
+
+	async getPackagesByOrderId (req: Request<{ id: string }>, res: Response<ResultWithValue<PackageDTO[]>>) {
+		const { id } = req.params;
+		const result = await this.mediator.send(new GetPackagesByOrderQuery(id));
 		return this.handlerResponse(res, result);
 	}
 

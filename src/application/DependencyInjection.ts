@@ -24,12 +24,26 @@ import { GenerateOrderHandler } from '@application/order/commands/generateOrder/
 import { IncreaseQuantityOrderItemCommand } from '@application/order/commands/increaseQuantityOrderItem/IncreaseQuantityOrderItemCommand';
 import { IncreaseQuantityOrderItemHandler } from '@application/order/commands/increaseQuantityOrderItem/IncreaseQuantityOrderItemHandler';
 
+import { CompletePackageCommand } from '@application/package/commands/completePackage/CompletePackageCommand';
+import { CompletePackageHandler } from '@application/package/commands/completePackage/CompletePackageHandler';
+
 //Domain Events
 import { OrderItemCompletedEvent } from '@domain/order/events/OrderItemCompletedEvent';
 import { OrderItemCompletedEventHandler } from '@application/order/events/OrderItemCompletedEventHandler';
 
 import { OrderCompletedEvent } from '@domain/order/events/OrderCompletedEvent';
 import { PackageCreateEventHandler } from '@application/package/events/PackageCreateEventHandler';
+
+import { PackageCompletedEvent } from '@domain/package/events/PackageCompletedEvent';
+import { CompletedPackageEventHandler } from '@application/package/events/PackageCompletedEventHandler';
+
+// Outbox Messages to publish
+import { PackageCompletedOutboxMessage } from '@domain/package/events/outbox/PackageCompletedOutboxMessage';
+import { PackageCompletedHandler } from '@application/outboxMessageHandler/PackageCompletedHandler';
+
+import { PackageAllCompletedOutboxMessage } from '@domain/package/events/outbox/PackageAllCompletedOutboxMessage';
+import { PackageAllCompletedHandler } from '@application/outboxMessageHandler/PackageAllCompletedHandler';
+
 
 container.register(CreateAddressCommand.name, {
 	useClass: CreateAddressHandler,
@@ -59,11 +73,13 @@ container.register(GenerateOrderCommand.name, {
 	useClass: GenerateOrderHandler,
 });
 
-
 container.register(IncreaseQuantityOrderItemCommand.name, {
 	useClass: IncreaseQuantityOrderItemHandler,
 });
 
+container.register(CompletePackageCommand.name, {
+	useClass: CompletePackageHandler,
+});
 
 
 // Domain Events
@@ -73,4 +89,20 @@ container.register(OrderItemCompletedEvent.name, {
 
 container.register(OrderCompletedEvent.name, {
 	useClass: PackageCreateEventHandler,
+});
+
+container.register(PackageCompletedEvent.name, {
+	useClass: CompletedPackageEventHandler,
+});
+
+
+
+// Outbox Messages to publish handlers
+
+container.register(PackageCompletedOutboxMessage.name, {
+	useClass: PackageCompletedHandler,
+});
+
+container.register(PackageAllCompletedOutboxMessage.name, {
+	useClass: PackageAllCompletedHandler,
 });

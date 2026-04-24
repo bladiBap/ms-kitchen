@@ -1,6 +1,7 @@
 export interface IRecipeDTO {
     id: string;
     name: string;
+    quantity: number;
 }
 
 export interface IAddressDTO {

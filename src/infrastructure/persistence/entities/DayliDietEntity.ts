@@ -1,10 +1,10 @@
 import {
 	Entity, PrimaryColumn, Column, ManyToOne,
-	ManyToMany, JoinTable, JoinColumn
+	OneToMany, JoinColumn
 } from 'typeorm';
 
-import { RecipeEntity } from './RecipeEntity';
 import { MealPlanEntity } from './MealPlanEntity';
+import { DayliDietRecipeEntity } from './DayliDietRecipeEntity';
 
 @Entity({
 	name: 'dayli_diet'
@@ -23,12 +23,6 @@ export class DayliDietEntity {
     @JoinColumn({ name: 'mealPlanId' })
     	mealPlan!: MealPlanEntity;
 
-
-    @ManyToMany(() => RecipeEntity, (recipe) => recipe.dayliDiets, { cascade: true, eager: true })
-    @JoinTable({
-    	name: 'dayli_diet_recipes',
-    	joinColumn: { name: 'dayliDietId', referencedColumnName: 'id' },
-    	inverseJoinColumn: { name: 'recipeId', referencedColumnName: 'id' }
-    })
-    	recipes!: RecipeEntity[];
+	@OneToMany(() => DayliDietRecipeEntity, (dayliDietRecipe) => dayliDietRecipe.dayliDiet, { cascade: true, eager: true })
+		dayliDietRecipes!: DayliDietRecipeEntity[];
 }

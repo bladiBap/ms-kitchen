@@ -1,20 +1,12 @@
 import { inject, injectable } from 'tsyringe';
 import { IEventDomainHandler } from '@core/interfaces/IEventDomainHandler';
-import { EventHandlerOutbox } from '@shared/registry/Decorators';
 
 import { PackageCompletedOutboxMessage } from '@domain/package/events/outbox/PackageCompletedOutboxMessage';
 import { OutboxMessage } from '@outbox/model/OutboxMessage';
 import { IExternalPublisher, IExternalPublisherToken } from '@comunication/contracts/services/IExternalPublisher';
-import { PackageCompletedIntegration } from '@/integration/paquete/PackageCreated';
-
-export class PackageCompletedOutbox extends OutboxMessage<PackageCompletedOutboxMessage> {
-	constructor(content: PackageCompletedOutboxMessage) {
-		super(content);
-	}
-}
+import { PackageCompletedIntegration } from '@/integration/paquete/PackageCompletedIntegration';
 
 @injectable()
-@EventHandlerOutbox(PackageCompletedOutbox, PackageCompletedOutboxMessage)
 export class PackageCompletedHandler implements IEventDomainHandler<OutboxMessage<PackageCompletedOutboxMessage>> {
 
 	private readonly eventType = 'orders';
@@ -33,6 +25,7 @@ export class PackageCompletedHandler implements IEventDomainHandler<OutboxMessag
 			domainEvent.customerId,
 			domainEvent.deliveryDate,
 			domainEvent.deliveryLocation,
+			domainEvent.deliveryAddress,
 			domainEvent.createdAt,
 			domainEvent.items
 		);

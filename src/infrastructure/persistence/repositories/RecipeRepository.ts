@@ -36,7 +36,7 @@ export class RecipeRepository implements IRecipeRepository {
 		const result: RecipeToPrepareDTO[] = await manager.query(`
             SELECT
                 ddr."recipeId" AS "recipeId",
-                COUNT(ddr."recipeId") AS "quantity"
+				COALESCE(SUM(ddr."quantity"), 0)::int AS "quantity"
             FROM "address" a
             INNER JOIN "calendar" c ON c."id" = a."calendarId"
             INNER JOIN "meal_plan" mp ON mp."id" = c."mealPlanId"

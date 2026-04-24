@@ -12,6 +12,11 @@ import { MarkOrderItemAsReadyBodySchema } from '@api/zod/schemas/order/MarkOrder
 
 const orderRouter = Router();
 
+orderRouter.get(
+	'',
+	LazyLoadRoute(OrderController, 'getAll')
+);
+
 orderRouter.post(
 	'',
 	BodySchemaMiddleware(CreateOrderBodySchema),
@@ -28,6 +33,12 @@ orderRouter.get(
 	'/:id',
 	ParamSchemaMiddleware(OrderIdParamSchema),
 	LazyLoadRoute(OrderController, 'getById')
+);
+
+orderRouter.get(
+	'/:id/packages',
+	ParamSchemaMiddleware(OrderIdParamSchema),
+	LazyLoadRoute(OrderController, 'getPackagesByOrderId')
 );
 
 orderRouter.patch(

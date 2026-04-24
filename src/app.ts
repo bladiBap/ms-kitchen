@@ -15,12 +15,29 @@ import { mainRouter } from '@api/routes';
 import { DiscoveryService } from '@/consul/DiscoveryService';
 import { AppDataSource, AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
+import { OutboxWorker } from '@outbox/processor/OutboxWorker';
+import { RabbitMQBusConfigurator } from '@comunication/rabbitMQ/RabbitMQBusConfigurator';
+import { ClientCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/ClientCreatedHandlerConsumer';
+
 async function startServer() {
 	const DataSource = await AppDataSource.initialize();
 	container.register(AppDataSourceToken, { useValue: DataSource });
 
 	const app = express();
 	const discoveryService = container.resolve(DiscoveryService);
+	const outboxWorker = container.resolve(OutboxWorker);
+	outboxWorker.start();
+
+	RabbitMQBusConfigurator.addConsumer(
+		'ClientCreated',
+		ClientCreatedHandlerConsumer,
+		'ms-kitchen-queue',
+		'patients',
+		'patient.created'
+	);
+
+
+	RabbitMQBusConfigurator.start();
 
 	app.use(cors());
 	app.use(morgan('dev'));

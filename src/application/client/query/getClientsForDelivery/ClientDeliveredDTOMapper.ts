@@ -16,9 +16,10 @@ export class ClientDeliveredDTOMapper {
 				longitude: item.longitude,
 			},
 			recipes: item.calendar.mealPlan.dayliDiets.flatMap((diet: any) =>
-				diet.recipes.map((recipe: any) => ({
-					id: recipe.id,
-					name: recipe.name,
+				diet.dayliDietRecipes.map((dayliDietRecipe: any) => ({
+					id: dayliDietRecipe.recipe.id,
+					name: dayliDietRecipe.recipe.name,
+					quantity: dayliDietRecipe.quantity,
 				}))
 			),
 		}));

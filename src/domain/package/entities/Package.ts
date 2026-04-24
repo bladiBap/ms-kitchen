@@ -51,6 +51,10 @@ export class Package extends AggregateRoot {
 		this.addDomainEvent(new PackageCompletedEvent(this.orderId, this.id));
 	}
 
+	public isCompleted(): boolean {
+		return this.statusPackage === StatusPackage.COMPLETED;
+	}
+
 	public getOrderId(): string {
 		return this.orderId;
 	}

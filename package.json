@@ -31,6 +31,13 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@opentelemetry/api": "^1.9.1",
+		"@opentelemetry/auto-instrumentations-node": "^0.73.0",
+		"@opentelemetry/exporter-trace-otlp-http": "^0.215.0",
+		"@opentelemetry/instrumentation-typeorm": "^0.15.0",
+		"@opentelemetry/resources": "^2.7.0",
+		"@opentelemetry/sdk-node": "^0.215.0",
+		"@opentelemetry/semantic-conventions": "^1.40.0",
 		"@pact-foundation/pact": "^13.2.0",
 		"amqplib": "^0.10.9",
 		"axios": "^1.13.2",

@@ -8,9 +8,10 @@ import { IUnitOfWork } from '@core/interfaces/IUnitOfWork';
 
 import { DomainEventsCollector } from '@application/DomainEventsCollector';
 import { AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
+import { IOutboxDatabase } from '@outbox/repository/IOutboxDatabase';
 
 @injectable()
-export class UnitOfWork implements IUnitOfWork {
+export class UnitOfWork implements IUnitOfWork, IOutboxDatabase  {
 	private queryRunner!: QueryRunner;
 	private readonly dataSource: DataSource;
 	private readonly ramdomName: string;

@@ -68,6 +68,12 @@ export class CompletePackageHandler implements IRequestHandler<CompletePackageCo
 			);
 		}
 
+		if (packageDomain.isCompleted()) {
+			return Result.failure(
+				Exception.Conflict('Package.AlreadyCompleted', `Package with id ${packageId} is already completed`)
+			);
+		}
+
 		const orderId = packageDomain.getOrderId();
 		const orderDomain = await this.orderRepository.getById(orderId);
 

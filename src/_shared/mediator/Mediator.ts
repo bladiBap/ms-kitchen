@@ -19,7 +19,13 @@ export class Mediator implements IMediator {
 	async publish(event: DomainEvent): Promise<void> {
 		const token = event.constructor.name;
 		const handler = container.resolve<IEventDomainHandler<DomainEvent>>(token);
-		return await handler.handle(event);	
+		return await handler.handle(event);
+	}
+
+	async publishOutbox<TContent extends DomainEvent>(outboxMessage: OutboxMessage<TContent>): Promise<void> {
+		const token = outboxMessage.content.constructor.name;
+		const handler = container.resolve<IEventDomainHandler<OutboxMessage<TContent>>>(token);
+		return await handler.handle(outboxMessage);
 	}
 
 	async publishOutboxMessage<TEvent extends DomainEvent>(message: OutboxMessage<TEvent>): Promise<void> {

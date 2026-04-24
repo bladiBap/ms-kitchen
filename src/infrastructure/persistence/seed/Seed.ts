@@ -11,6 +11,7 @@ import { AddressEntity } from '@infrastructure/persistence/entities/AddressEntit
 import { CalendarEntity } from '@infrastructure/persistence/entities/CalendarEntity';
 import { MealPlanEntity } from '@infrastructure/persistence/entities/MealPlanEntity';
 import { DayliDietEntity } from '@infrastructure/persistence/entities/DayliDietEntity';
+import { DayliDietRecipeEntity } from '@infrastructure/persistence/entities/DayliDietRecipeEntity';
 import { IngredientEntity } from '@infrastructure/persistence/entities/IngredientEntity';
 import { MeasurementUnitEntity } from '@infrastructure/persistence/entities/MeasurementUnitEntity';
 import { RecipeIngredientEntity } from '@infrastructure/persistence/entities/RecipeIngredientEntity';
@@ -30,6 +31,7 @@ async function seed() {
 	const calendarRepo = appConection.getRepository(CalendarEntity);
 	const mealPlanRepo = appConection.getRepository(MealPlanEntity);
 	const dayliDietRepo = appConection.getRepository(DayliDietEntity);
+	const dayliDietRecipeRepo = appConection.getRepository(DayliDietRecipeEntity);
 
 	const [gram, piece] = await unitRepo.save([
 		unitRepo.create({ id: randomUUID(), name: 'Gram', simbol: 'g' }),
@@ -165,14 +167,12 @@ async function seed() {
 		date: today,
 		nDayPlan: 3,
 		mealPlan: mealPlan1,
-		recipes: [recipe1, recipe2],
 	} as DayliDietEntity);
 	const diet2 = dayliDietRepo.create({
 		id: randomUUID(),
 		date: today,
 		nDayPlan: 3,
 		mealPlan: mealPlan2,
-		recipes: [recipe2],
 	} as DayliDietEntity);
 
 	const dietTomorrow1 = dayliDietRepo.create({
@@ -180,7 +180,6 @@ async function seed() {
 		date: tomorrow,
 		nDayPlan: 4,
 		mealPlan: mealPlan1,
-		recipes: [],
 	});
 
 	const dietTomorrow2 = dayliDietRepo.create({
@@ -188,7 +187,6 @@ async function seed() {
 		date: tomorrow,
 		nDayPlan: 4,
 		mealPlan: mealPlan2,
-		recipes: [],
 	});
 
 	const dietDayAfterTomorrow1 = dayliDietRepo.create({
@@ -196,7 +194,6 @@ async function seed() {
 		date: dayAfterTomorrow,
 		nDayPlan: 5,
 		mealPlan: mealPlan1,
-		recipes: [recipe1],
 	} as DayliDietEntity);
 
 	const dietDayAfterTomorrow2 = dayliDietRepo.create({
@@ -204,10 +201,17 @@ async function seed() {
 		date: dayAfterTomorrow,
 		nDayPlan: 5,
 		mealPlan: mealPlan2,
-		recipes: [recipe2],
 	} as DayliDietEntity);
 
 	await dayliDietRepo.save([diet1, diet2, dietTomorrow1, dietTomorrow2, dietDayAfterTomorrow1, dietDayAfterTomorrow2]);
+
+	await dayliDietRecipeRepo.save([
+		dayliDietRecipeRepo.create({ dayliDietId: diet1.id, recipeId: recipe1!.id, quantity: 2, dayliDiet: diet1, recipe: recipe1 }),
+		dayliDietRecipeRepo.create({ dayliDietId: diet1.id, recipeId: recipe2!.id, quantity: 1, dayliDiet: diet1, recipe: recipe2 }),
+		dayliDietRecipeRepo.create({ dayliDietId: diet2.id, recipeId: recipe2!.id, quantity: 3, dayliDiet: diet2, recipe: recipe2 }),
+		dayliDietRecipeRepo.create({ dayliDietId: dietDayAfterTomorrow1.id, recipeId: recipe1!.id, quantity: 2, dayliDiet: dietDayAfterTomorrow1, recipe: recipe1 }),
+		dayliDietRecipeRepo.create({ dayliDietId: dietDayAfterTomorrow2.id, recipeId: recipe2!.id, quantity: 1, dayliDiet: dietDayAfterTomorrow2, recipe: recipe2 }),
+	]);
 
 	console.log('Database seeded successfully!');
 	process.exit(0);

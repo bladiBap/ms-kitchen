@@ -2,7 +2,7 @@ import { injectable, inject } from 'tsyringe';
 import { Mediator } from '@shared/mediator/Mediator';
 import { DomainEvent } from '@core/abstraction/DomainEvent';
 
-import { Transactional } from '@application/common/decorator/Transactional';
+import { TransactionalEventHandler } from '@application/common/decorator/Transactional';
 import { OutboxMessage } from '@outbox/model/OutboxMessage';
 import { IOutboxRepository, IOutboxRepositoryToken } from '@outbox/repository/IOutboxRepository';
 
@@ -25,9 +25,9 @@ export class OutboxProcessor<TContent extends DomainEvent> {
 		}
 	}
 
-	@Transactional()
+	@TransactionalEventHandler()
 	private async publishOutboxMessage(outboxMessage: OutboxMessage<TContent>): Promise<void> {
-		await this.mediator.publishOutboxMessage(outboxMessage);
+		await this.mediator.publishOutbox<TContent>(outboxMessage);
 		outboxMessage.markAsProcessed();
 		await this.outboxRepo.update(outboxMessage);
 		console.log(`Mensaje ${outboxMessage.id} procesado exitosamente.`);

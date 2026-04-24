@@ -51,7 +51,7 @@ export class AddressRepository implements IAddressRepository {
                 c."id" AS "clientId",
                 c."name" AS "clientName",
                 ddr."recipeId" AS "recipeId",
-                COUNT(ddr."recipeId") AS "quantity"
+				COALESCE(SUM(ddr."quantity"), 0)::int AS "quantity"
             FROM "address" a
             INNER JOIN "calendar" cal ON cal."id" = a."calendarId"
             INNER JOIN "meal_plan" mp ON mp."id" = cal."mealPlanId"
@@ -92,7 +92,8 @@ export class AddressRepository implements IAddressRepository {
                 a."longitude" AS "longitude",
                 a."id" AS "addressId",
                 r."name" AS "recipeName",
-                r."id"   AS "recipeId"
+				r."id"   AS "recipeId",
+				ddr."quantity" AS "quantity"
             FROM "address" a
             INNER JOIN "calendar" cal ON cal."id" = a."calendarId"
             INNER JOIN "meal_plan" mp ON mp."id" = cal."mealPlanId"
