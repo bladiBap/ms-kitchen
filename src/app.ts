@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 
+import '@/opentelemetry/Opentelemetry';
 import 'reflect-metadata';
 import '@infrastructure/DependencyInjection';
 import '@application/DependencyInjection';
@@ -40,55 +41,6 @@ async function startServer() {
 		'patients',
 		'patient.created'
 	);
-
-	// RabbitMQBusConfigurator.addConsumer(
-	// 	'IngredientCreated',
-	// 	IngredientCreatedHandlerConsumer,
-	// 	'ms-kitchen-queue',
-	// 	'meal-plans',
-	// 	'meal-plan.ingredient'
-	// );
-
-	// RabbitMQBusConfigurator.addConsumer(
-	// 	'RecipeCreated',
-	// 	RecipeCreatedHandlerConsumer,
-	// 	'ms-kitchen-queue',
-	// 	'meal-plans',
-	// 	'meal-plan.receta'
-	// );
-
-	// RabbitMQBusConfigurator.addConsumer(
-	// 	'MealPlanCreated',
-	// 	MealPlanCreatedHandlerConsumer,
-	// 	'ms-kitchen-queue',
-	// 	'meal-plans',
-	// 	'meal-plan.plan'
-	// );
-
-	// RabbitMQBusConfigurator.addConsumer(
-	// 	'CalendarCreated',
-	// 	CalendarCreatedHandlerConsumer,
-	// 	'ms-kitchen-queue',
-	// 	'calendar',
-	// 	'calendar.created'
-	// );
-
-	// RabbitMQBusConfigurator.addConsumer(
-	// 	'AddressCreated',
-	// 	AddressCreatedHandlerConsumer,
-	// 	'ms-kitchen-queue',
-	// 	'calendar',
-	// 	'address.created'
-	// );
-
-	// RabbitMQBusConfigurator.addConsumer(
-	// 	'AddressUpdated',
-	//  AddressUpdatedHandlerConsumer,
-	// 	'ms-kitchen-queue',
-	// 	'calendar',
-	// 	'address.updated'
-	// );
-
 
 	RabbitMQBusConfigurator.start();
 
