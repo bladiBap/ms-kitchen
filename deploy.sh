@@ -2,7 +2,7 @@
 
 set -e
 
-cd /root/ms-kitchen
+cd /ms-kitchen
 
 git pull origin main
 
