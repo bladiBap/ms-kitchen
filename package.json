@@ -15,6 +15,7 @@
 		"migration:revert": "npm run typeorm migration:revert",
 		"seed": "ts-node -r tsconfig-paths/register src/infrastructure/persistence/seed/Seed.ts",
 		"test": "jest",
+		"test:unit": "jest src/test/unit --coverage --maxWorkers=2",
 		"test:ci": "jest --coverage --maxWorkers=2",
 		"test:watch": "jest --watch",
 		"test:coverage": "jest --coverage",
