@@ -17,12 +17,8 @@ import { DiscoveryService } from '@/ds/DiscoveryService';
 import { AppDataSource, AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 import { RabbitMQBusConfigurator } from '@comunication/rabbitMQ/RabbitMQBusConfigurator';
-import { CalendarCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/CalendarCreatedHandlerConsumer';
-import { AddressCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/AddressCreatedHandlerConsumer';
-import { AddressUpdatedHandlerConsumer } from '@infrastructure/rabbitMQ/AddressUpdatedHandlerConsumer';
 import { ClientCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/ClientCreatedHandlerConsumer';
-import { IngredientCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/IngredientCreatedHandlerConsumer';
-import { RecipeCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/RecipeCreatedHandlerConsumer';
+import { OutboxWorker } from '@outbox/processor/OutboxWorker';
 
 
 async function startServer() {
@@ -31,8 +27,8 @@ async function startServer() {
 
 	const app = express();
 	const discoveryService = container.resolve(DiscoveryService);
-	// const outboxWorker = container.resolve(OutboxWorker);
-	// outboxWorker.start();
+	const outboxWorker = container.resolve(OutboxWorker);
+	outboxWorker.start();
 
 	RabbitMQBusConfigurator.addConsumer(
 		'ClientCreated',
