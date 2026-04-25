@@ -42,14 +42,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           timeout: 2m
           script: |
-            echo "--- Ubicación actual ---"
-            pwd
-            
-            echo "--- Listando archivos en la raíz ---"
-            ls -lh /
-            
-            echo "--- Verificando contenido de /ms-kitchen ---"
-            ls -lh /ms-kitchen
-            
-            echo "--- Iniciando script de despliegue ---"
-            bash /ms-kitchen/deploy.sh
+            bash /root/ms-kitchen/deploy.sh
