@@ -28,12 +28,13 @@ export class DiscoveryService implements IDiscoveryService {
 				port: env.MS_KITCHEN_APP_PORT,
 				check: {
 					name: `Health Check for ${this.serviceId}`,
-					http: `http://${env.MS_KITCHEN_APP_HOST}:${env.MS_KITCHEN_APP_PORT}/api/kitchen/health`,
+					http: `http://${env.MS_KITCHEN_APP_HOST}:80/api/kitchen/health`,
 					interval: env.CONSUL_INTERVAL,
 					timeout: env.CONSUL_TIMEOUT,
 					deregistercriticalserviceafter: env.CONSUL_DEREGISTER_AFTER
 				}
 			});
+			console.log(`http://${env.MS_KITCHEN_APP_HOST}:80/api/kitchen/health`);
             console.log(`Registrado en Consul con ID: ${this.serviceId}`);
         } catch (err) {
             console.error('Error al registrar en Consul:', err);
