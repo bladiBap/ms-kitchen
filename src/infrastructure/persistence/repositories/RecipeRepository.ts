@@ -4,6 +4,8 @@ import { IEntityManagerProvider, IEntityManagerProviderToken } from '@core/inter
 import { Recipe } from '@domain/recipe/entities/Recipe';
 import { IRecipeRepository } from '@domain/recipe/repositories/IRecipeRepository';
 import { RecipeToPrepareDTO } from '@application/order/dto/RecipeToPrepareDTO';
+import { RecipeEntity } from '../entities/RecipeEntity';
+import { RecipeMapper } from '../mappers/RecipeMapper';
 
 @injectable()
 export class RecipeRepository implements IRecipeRepository {
@@ -13,20 +15,10 @@ export class RecipeRepository implements IRecipeRepository {
 	) {}
 
 	async create(entity: Recipe): Promise<Recipe> {
-		console.log(`Creating recipe with id: ${entity.getId()}`);
-		throw new Error('Method not implemented.');
-	}
-
-	async update(entity: Recipe): Promise<Recipe> {
-		console.log(`Updating recipe with id: ${entity.getId()}`);
-		throw new Error('Method not implemented.');
-	}
-	async delete(id: string): Promise<void> {
-		console.log(`Deleting recipe with id: ${id}`);
-		throw new Error('Method not implemented.');
-	}
-	async getAll(): Promise<Recipe[]> {
-		return this.emProvider.getManager().find(Recipe);
+		const manager = this.emProvider.getManager();
+		const recipeRepository = manager.getRepository(RecipeEntity);
+		await recipeRepository.save(RecipeMapper.toPersistence(entity));
+		return entity;
 	}
 
 	async getRecipesToPrepare(date: Date): Promise<RecipeToPrepareDTO[]> {
@@ -49,10 +41,5 @@ export class RecipeRepository implements IRecipeRepository {
 		);
 
 		return result;
-	}
-
-	async getById(id: string, readOnly?: boolean): Promise<Recipe | null> {
-		console.log(`Fetching recipe with id: ${id} (readOnly: ${readOnly})`);
-		return null;
 	}
 }

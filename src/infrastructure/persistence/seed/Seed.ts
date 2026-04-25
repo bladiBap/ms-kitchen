@@ -33,9 +33,11 @@ async function seed() {
 	const dayliDietRepo = appConection.getRepository(DayliDietEntity);
 	const dayliDietRecipeRepo = appConection.getRepository(DayliDietRecipeEntity);
 
-	const [gram, piece] = await unitRepo.save([
-		unitRepo.create({ id: randomUUID(), name: 'Gram', simbol: 'g' }),
-		unitRepo.create({ id: randomUUID(), name: 'Piece', simbol: 'pc' }),
+	const [gram, kilo, litro, mililitro] = await unitRepo.save([
+		unitRepo.create({ id: 1, name: 'Gramos', simbol: 'g' }),
+		unitRepo.create({ id: 2, name: 'Kilogramos', simbol: 'kg' }),
+		unitRepo.create({ id: 3, name: 'Mililitros', simbol: 'ml' }),
+		unitRepo.create({ id: 4, name: 'Litros', simbol: 'l' })
 	]);
 
 	const [client1, client2] = await clientRepo.save([
@@ -47,7 +49,7 @@ async function seed() {
 	const [rice, chicken, egg] = await ingredientRepo.save([
 		ingredientRepo.create({ id: randomUUID(), name: 'Rice', measurementUnit: gram }),
 		ingredientRepo.create({ id: randomUUID(), name: 'Chicken Breast', measurementUnit: gram }),
-		ingredientRepo.create({ id: randomUUID(), name: 'Egg', measurementUnit: piece }),
+		ingredientRepo.create({ id: randomUUID(), name: 'Egg', measurementUnit: kilo }),
 	]);
 
 	const [recipe1, recipe2] = await recipeRepo.save([

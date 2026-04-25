@@ -5,15 +5,15 @@ import { IngredientEntity } from './IngredientEntity';
 	name: 'measurement_unit'
 })
 export class MeasurementUnitEntity {
-	@PrimaryColumn('uuid')
-    	id!: string;
+	@PrimaryColumn('int')
+	id!: number;
 
-    @Column()
-    	name!: string;
+	@Column()
+	name!: string;
 
-    @Column()
-    	simbol!: string;
+	@Column()
+	simbol!: string;
 
-    @OneToMany(() => IngredientEntity, (ingredient) => ingredient.measurementUnit)
-    	ingredients!: IngredientEntity[];
+	@OneToMany(() => IngredientEntity, (ingredient) => ingredient.measurementUnit)
+	ingredients!: IngredientEntity[];
 }

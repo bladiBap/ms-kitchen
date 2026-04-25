@@ -1,9 +1,9 @@
-import { Recipe } from '@domain/recipe/entities/Recipe';
-import { IRepository } from '@core/interfaces/IRepository';
 import { RecipeToPrepareDTO } from '@application/order/dto/RecipeToPrepareDTO';
+import { Recipe } from '../entities/Recipe';
 
 export const IRecipeRepositoryToken = Symbol('IRecipeRepository');
 
-export interface IRecipeRepository extends IRepository<Recipe> {
+export interface IRecipeRepository {
+	create(entity: Recipe): Promise<Recipe>;
     getRecipesToPrepare(date: Date): Promise<RecipeToPrepareDTO[]>;
 }

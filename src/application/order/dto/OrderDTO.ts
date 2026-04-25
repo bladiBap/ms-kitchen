@@ -28,7 +28,7 @@ export interface IngredientDTO {
 }
 
 export interface MeasurementUnitDTO {
-    id: string;
-    name: string;
-    simbol: string;
+	id: number;
+	name: string;
+	simbol: string;
 }

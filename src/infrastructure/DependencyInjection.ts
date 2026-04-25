@@ -26,6 +26,15 @@ import { IDailyAllocationRepositoryToken } from '@domain/daily-allocation/reposi
 import { IPackageRepositoryToken } from '@domain/package/repositories/IPackageRepository';
 import { PackageRepository } from '@infrastructure/persistence/repositories/PackageRepository';
 
+import { IIngredientRepositoryToken } from '@domain/ingredient/repositories/IIngredientRepository';
+import { IngredientRepository } from '@infrastructure/persistence/repositories/IngredientRepository';
+
+import { IMealPlanRepositoryToken } from '@domain/mealPlan/repositories/IMealPlanRepository';
+import { MealPlanRepository } from '@infrastructure/persistence/repositories/MealPlanRepository';
+
+import { ICalendarRepositoryToken } from '@domain/calendar/repositories/ICalendarRepository';
+import { CalendarRepository } from '@infrastructure/persistence/repositories/CalendarRepository';
+
 //Queries
 import { GetAddressByIdQuery } from '@application/address/query/GetAddressByIdQuery';
 import { GetAddressByIdHandler } from '@infrastructure/querys/address/GetAddressByIdHandler';
@@ -42,10 +51,6 @@ import { GetClientsForDeliveredHandler } from '@infrastructure/querys/client/Get
 
 import { GetPackagesByOrderQuery } from '@application/package/queries/getPackagesByOrderQuery/GetPackagesByOrderQuery';
 import { GetPackagesByOrderHandler } from '@infrastructure/querys/package/GetPackagesByOrderHandler';
-
-//Integration Events
-import { ClientCreatedCommand } from '@application/client/command/ClientCreatedCommand';
-import { ClientCreatedHandler } from '@application/client/command/ClientCreatedHandler';
 
 //Outbox
 import { IExternalPublisherToken } from '@comunication/contracts/services/IExternalPublisher';
@@ -73,6 +78,9 @@ container.register(IRecipeRepositoryToken, { useClass: RecipeRepository });
 container.register(IDailyAllocationRepositoryToken, { useClass: DailyAllocationRepository });
 container.register(IOrderItemRepositoryToken, { useClass: OrderItemRepository });
 container.register(IPackageRepositoryToken, { useClass: PackageRepository });
+container.register(IIngredientRepositoryToken, { useClass: IngredientRepository });
+container.register(IMealPlanRepositoryToken, { useClass: MealPlanRepository });
+container.register(ICalendarRepositoryToken, { useClass: CalendarRepository });
 
 //Queries
 container.register(GetAddressByIdQuery.name, { useClass: GetAddressByIdHandler });
@@ -81,8 +89,6 @@ container.register(GetPackagesByOrderQuery.name, { useClass: GetPackagesByOrderH
 container.register(GetOrderByDayQuery.name, { useClass: GetOrderByDayHandler });
 container.register(GetOrderByIdQuery.name, { useClass: GetOrderByIdHandler });
 container.register(GetAllOrdersQuery.name, { useClass: GetAllOrdersHandler });
-//Integration Events
-container.register(ClientCreatedCommand.name, { useClass: ClientCreatedHandler });
 
 //Outbox
 container.registerSingleton(IExternalPublisherToken, RabbitMQExternalPublisher);

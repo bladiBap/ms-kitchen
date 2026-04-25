@@ -3,7 +3,7 @@ import { IEventDomainHandler } from '@core/interfaces/IEventDomainHandler';
 
 import { OutboxMessage } from '@outbox/model/OutboxMessage';
 import { PackageAllCompletedOutboxMessage } from '@domain/package/events/outbox/PackageAllCompletedOutboxMessage';
-import { PackageAllCompletedIntegration } from '@/integration/paquete/PackageAllCompletedIntegration';
+import { PackageAllCompletedIntegration } from '@/integration/outgoing/paquete/PackageAllCompletedIntegration';
 import { IExternalPublisher, IExternalPublisherToken } from '@comunication/contracts/services/IExternalPublisher';
 
 @injectable()

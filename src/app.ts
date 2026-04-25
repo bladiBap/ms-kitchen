@@ -15,9 +15,14 @@ import { mainRouter } from '@api/routes';
 import { DiscoveryService } from '@/consul/DiscoveryService';
 import { AppDataSource, AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
-import { OutboxWorker } from '@outbox/processor/OutboxWorker';
 import { RabbitMQBusConfigurator } from '@comunication/rabbitMQ/RabbitMQBusConfigurator';
+import { CalendarCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/CalendarCreatedHandlerConsumer';
+import { AddressCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/AddressCreatedHandlerConsumer';
+import { AddressUpdatedHandlerConsumer } from '@infrastructure/rabbitMQ/AddressUpdatedHandlerConsumer';
 import { ClientCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/ClientCreatedHandlerConsumer';
+import { IngredientCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/IngredientCreatedHandlerConsumer';
+import { RecipeCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/RecipeCreatedHandlerConsumer';
+
 
 async function startServer() {
 	const DataSource = await AppDataSource.initialize();
@@ -25,8 +30,8 @@ async function startServer() {
 
 	const app = express();
 	const discoveryService = container.resolve(DiscoveryService);
-	const outboxWorker = container.resolve(OutboxWorker);
-	outboxWorker.start();
+	// const outboxWorker = container.resolve(OutboxWorker);
+	// outboxWorker.start();
 
 	RabbitMQBusConfigurator.addConsumer(
 		'ClientCreated',
@@ -35,6 +40,54 @@ async function startServer() {
 		'patients',
 		'patient.created'
 	);
+
+	// RabbitMQBusConfigurator.addConsumer(
+	// 	'IngredientCreated',
+	// 	IngredientCreatedHandlerConsumer,
+	// 	'ms-kitchen-queue',
+	// 	'meal-plans',
+	// 	'meal-plan.ingredient'
+	// );
+
+	// RabbitMQBusConfigurator.addConsumer(
+	// 	'RecipeCreated',
+	// 	RecipeCreatedHandlerConsumer,
+	// 	'ms-kitchen-queue',
+	// 	'meal-plans',
+	// 	'meal-plan.receta'
+	// );
+
+	// RabbitMQBusConfigurator.addConsumer(
+	// 	'MealPlanCreated',
+	// 	MealPlanCreatedHandlerConsumer,
+	// 	'ms-kitchen-queue',
+	// 	'meal-plans',
+	// 	'meal-plan.plan'
+	// );
+
+	// RabbitMQBusConfigurator.addConsumer(
+	// 	'CalendarCreated',
+	// 	CalendarCreatedHandlerConsumer,
+	// 	'ms-kitchen-queue',
+	// 	'calendar',
+	// 	'calendar.created'
+	// );
+
+	// RabbitMQBusConfigurator.addConsumer(
+	// 	'AddressCreated',
+	// 	AddressCreatedHandlerConsumer,
+	// 	'ms-kitchen-queue',
+	// 	'calendar',
+	// 	'address.created'
+	// );
+
+	// RabbitMQBusConfigurator.addConsumer(
+	// 	'AddressUpdated',
+	//  AddressUpdatedHandlerConsumer,
+	// 	'ms-kitchen-queue',
+	// 	'calendar',
+	// 	'address.updated'
+	// );
 
 
 	RabbitMQBusConfigurator.start();

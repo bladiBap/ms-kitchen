@@ -4,6 +4,7 @@ import client, { Channel, ChannelModel, ConsumeMessage } from 'amqplib';
 import { RabbitMQSettings } from '@comunication/rabbitMQ/services/RabbitMQSetting';
 import { IntegrationMessage } from '@comunication/contracts/message/IntegrationMessage';
 import { IIntegrationMessageConsumer } from '@comunication/contracts/services/IIntegrationMessageConsumer';
+import { RoutingHandlers } from './RoutingHandlers';
 
 export class RabbitMQConsumer<T extends IntegrationMessage> {
 
@@ -95,15 +96,20 @@ export class RabbitMQConsumer<T extends IntegrationMessage> {
 			if (!msg) {
 				return;
 			}
-
+			const routingKey = msg.fields.routingKey;
 			try {
-
-				const handler = container.resolve(this._handlerToken);
+				const handlerTarget = RoutingHandlers[routingKey];
 
 				const content = this.deserializeMessage(msg.content);
 
 				if (content) {
-					await handler.handle(content);
+					if (!handlerTarget) {
+						console.warn(`No se encontró un handler para el routing key: ${routingKey}`);
+						this._channel.nack(msg, false, false);
+						return;
+					}
+					const handlerInstance = container.resolve<IIntegrationMessageConsumer<any>>(handlerTarget);
+					await handlerInstance.handle(content);
 
 					this._channel.ack(msg);
 				}

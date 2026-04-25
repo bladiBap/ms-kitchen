@@ -44,7 +44,9 @@
         "noImplicitOverride": true,
         "skipLibCheck": true,
 
-        "allowImportingTsExtensions": false
+        "allowImportingTsExtensions": false,
+
+		"types": ["node", "jest"]
     },
     "include": ["src/**/*"],
     "exclude": ["node_modules", "dist"]

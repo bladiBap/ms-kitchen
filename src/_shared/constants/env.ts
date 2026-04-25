@@ -22,7 +22,9 @@ const {
 	CONSUL_PORT,
 	CONSUL_INTERVAL,
 	CONSUL_TIMEOUT,
-	CONSUL_DEREGISTER_AFTER
+	CONSUL_DEREGISTER_AFTER,
+
+	
 } = process.env;
 
 export const env = {

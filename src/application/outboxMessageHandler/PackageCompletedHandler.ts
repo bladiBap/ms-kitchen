@@ -4,7 +4,7 @@ import { IEventDomainHandler } from '@core/interfaces/IEventDomainHandler';
 import { PackageCompletedOutboxMessage } from '@domain/package/events/outbox/PackageCompletedOutboxMessage';
 import { OutboxMessage } from '@outbox/model/OutboxMessage';
 import { IExternalPublisher, IExternalPublisherToken } from '@comunication/contracts/services/IExternalPublisher';
-import { PackageCompletedIntegration } from '@/integration/paquete/PackageCompletedIntegration';
+import { PackageCompletedIntegration } from '@/integration/outgoing/paquete/PackageCompletedIntegration';
 
 @injectable()
 export class PackageCompletedHandler implements IEventDomainHandler<OutboxMessage<PackageCompletedOutboxMessage>> {

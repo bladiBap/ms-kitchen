@@ -31,7 +31,7 @@ export class UpdateAddressHandler implements IRequestHandler<UpdateAddressComman
 		addressToUpdate.setReference(request.reference);
 		addressToUpdate.setDate(request.date);
 		addressToUpdate.setLocation(location);
-		addressToUpdate.setNeedsDelivery(request.needsDelivery);
+		//addressToUpdate.setNeedsDelivery(request.needsDelivery);
 
 		await this.addressRepository.update(addressToUpdate);
 		return Result.success();

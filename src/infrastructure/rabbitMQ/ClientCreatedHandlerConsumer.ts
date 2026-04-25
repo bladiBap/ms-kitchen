@@ -1,6 +1,6 @@
 import { inject, injectable } from 'tsyringe';
 import { Mediator } from '@shared/mediator/Mediator';
-import { ClientCreated } from '@/integration/client/ClientCreated';
+import { ClientCreated } from '@/integration/incomming/client/ClientCreated';
 import { IIntegrationMessageConsumer } from '@comunication/contracts/services/IIntegrationMessageConsumer';
 import { ClientCreatedCommand } from '@application/client/command/ClientCreatedCommand';
 

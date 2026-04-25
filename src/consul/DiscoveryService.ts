@@ -1,5 +1,4 @@
 import { singleton } from 'tsyringe';
-import { v4 as uuidv4 } from 'uuid';
 import Consul from 'consul';
 
 import { env } from '@shared/constants/env';
@@ -14,7 +13,7 @@ export class DiscoveryService implements IDiscoveryService {
 
     constructor() {
 		this.serviceName = env.MS_KITCHEN_APP_NAME;
-		this.serviceId = `${this.serviceName}-${uuidv4()}`;
+		this.serviceId = this.serviceName;
         this.consul = new Consul({
             host: env.CONSUL_HOST,
             port: env.CONSUL_PORT,
