@@ -16,9 +16,9 @@ import { mainRouter } from '@api/routes';
 import { DiscoveryService } from '@/ds/DiscoveryService';
 import { AppDataSource, AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
+import { OutboxWorker } from '@outbox/processor/OutboxWorker';
 import { RabbitMQBusConfigurator } from '@comunication/rabbitMQ/RabbitMQBusConfigurator';
 import { ClientCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/ClientCreatedHandlerConsumer';
-import { OutboxWorker } from '@outbox/processor/OutboxWorker';
 
 
 async function startServer() {
