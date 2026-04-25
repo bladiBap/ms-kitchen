@@ -12,7 +12,7 @@ import { container } from 'tsyringe';
 
 import { env } from '@shared/constants/env';
 import { mainRouter } from '@api/routes';
-import { DiscoveryService } from '@/consul/DiscoveryService';
+import { DiscoveryService } from '@/ds/DiscoveryService';
 import { AppDataSource, AppDataSourceToken } from '@infrastructure/persistence/dataSource/DataSource';
 
 import { RabbitMQBusConfigurator } from '@comunication/rabbitMQ/RabbitMQBusConfigurator';
@@ -100,7 +100,7 @@ async function startServer() {
 
 	app.listen(env.MS_KITCHEN_APP_PORT, async () => {
 		console.log(`Server is running on port ${env.MS_KITCHEN_APP_PORT}`);
-		// await discoveryService.register();
+		await discoveryService.register();
 	});
 
 	process.on('SIGINT', async () => {

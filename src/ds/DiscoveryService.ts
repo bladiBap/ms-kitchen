@@ -1,8 +1,7 @@
-import { singleton } from 'tsyringe';
 import Consul from 'consul';
+import { singleton } from 'tsyringe';
 
 import { env } from '@shared/constants/env';
-import { RegisterOptions } from 'consul/lib/agent/service';
 import { IDiscoveryService } from '@core/interfaces/IDiscoveryService';
 
 @singleton()
@@ -21,22 +20,20 @@ export class DiscoveryService implements IDiscoveryService {
     }
 
     async register() {
-        const registrationDetails: RegisterOptions = {
-            name: this.serviceName,
-            id: this.serviceId,
-            address: env.MS_KITCHEN_APP_HOST,
-            port: env.MS_KITCHEN_APP_PORT,
-            check: {
-				name: `Health Check for ${this.serviceId}`,
-                http: `http://${env.MS_KITCHEN_APP_HOST}:${env.MS_KITCHEN_APP_PORT}/api/kitchen/health`,
-                interval: env.CONSUL_INTERVAL,
-                timeout: env.CONSUL_TIMEOUT,
-				deregistercriticalserviceafter: env.CONSUL_DEREGISTER_AFTER
-            }
-        };
-
         try {
-            await this.consul.agent.service.register(registrationDetails);
+            await this.consul.agent.service.register({
+				name: this.serviceName,
+				id: this.serviceId,
+				address: env.MS_KITCHEN_APP_HOST,
+				port: env.MS_KITCHEN_APP_PORT,
+				check: {
+					name: `Health Check for ${this.serviceId}`,
+					http: `http://${env.MS_KITCHEN_APP_HOST}:${env.MS_KITCHEN_APP_PORT}/api/kitchen/health`,
+					interval: env.CONSUL_INTERVAL,
+					timeout: env.CONSUL_TIMEOUT,
+					deregistercriticalserviceafter: env.CONSUL_DEREGISTER_AFTER
+				}
+			});
             console.log(`Registrado en Consul con ID: ${this.serviceId}`);
         } catch (err) {
             console.error('Error al registrar en Consul:', err);

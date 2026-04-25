@@ -9,12 +9,12 @@ const sdk = new NodeSDK({
 	serviceName: 'ms-kitchen',
 	traceExporter: new OTLPTraceExporter({
 		// URL de Tempo (usando el puerto gRPC 4317)
-		url: 'http://localhost:4317',
+		url: 'http://165.22.148.216:4317',
 	}),
 	metricReader: new PeriodicExportingMetricReader({
 		// Enviamos métricas al puerto 4317 de Tempo/Prometheus cada 60s
 		exporter: new OTLPMetricExporter({
-			url: 'http://localhost:4317',
+			url: 'http://165.22.148.216:4317',
 		}),
 		exportIntervalMillis: 60000,
 	}),
