@@ -42,4 +42,4 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           timeout: 2m
           script: |
-            bash /root/ms-kitchen/deploy.sh
+            bash /ms-kitchen/deploy.sh
