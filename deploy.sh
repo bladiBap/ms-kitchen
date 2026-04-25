@@ -2,9 +2,6 @@
 
 set -e
 
-ls
-cd /ms-kitchen
-
 git pull origin main
 
 if [ ! -f .env ]; then
