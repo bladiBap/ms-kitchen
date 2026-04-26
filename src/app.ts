@@ -18,7 +18,6 @@ import { AppDataSource, AppDataSourceToken } from '@infrastructure/persistence/d
 
 import { OutboxWorker } from '@outbox/processor/OutboxWorker';
 import { RabbitMQBusConfigurator } from '@comunication/rabbitMQ/RabbitMQBusConfigurator';
-import { ClientCreatedHandlerConsumer } from '@infrastructure/rabbitMQ/ClientCreatedHandlerConsumer';
 
 
 async function startServer() {
@@ -30,14 +29,7 @@ async function startServer() {
 	const outboxWorker = container.resolve(OutboxWorker);
 	outboxWorker.start();
 
-	RabbitMQBusConfigurator.addConsumer(
-		'ClientCreated',
-		ClientCreatedHandlerConsumer,
-		'ms-kitchen-queue',
-		'patients',
-		'patient.created'
-	);
-
+	RabbitMQBusConfigurator.addConsumers();
 	//RabbitMQBusConfigurator.start();
 
 	app.use(cors());

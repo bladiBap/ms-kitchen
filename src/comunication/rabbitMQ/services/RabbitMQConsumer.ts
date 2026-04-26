@@ -1,36 +1,20 @@
-import { InjectionToken, container } from 'tsyringe';
+import { container } from 'tsyringe';
 import client, { Channel, ChannelModel, ConsumeMessage } from 'amqplib';
 
 import { RabbitMQSettings } from '@comunication/rabbitMQ/services/RabbitMQSetting';
-import { IntegrationMessage } from '@comunication/contracts/message/IntegrationMessage';
 import { IIntegrationMessageConsumer } from '@comunication/contracts/services/IIntegrationMessageConsumer';
 import { RoutingHandlers } from './RoutingHandlers';
 
-export class RabbitMQConsumer<T extends IntegrationMessage> {
+export class RabbitMQConsumer {
 
-	private _queueName: string;
-	private _exchangeName: string;
 	private _settings: RabbitMQSettings;
-	private _declareQueue: boolean;
 	private _connection!: ChannelModel;
 	private _channel!: Channel;
-	private _routingKey: string;
-	private _handlerToken: InjectionToken<IIntegrationMessageConsumer<T>>;
 
 	constructor(
-		queueName: string,
 		settings: RabbitMQSettings,
-		declareQueue: boolean,
-		exchangeName: string,
-		routingKey: string,
-		handlerToken: InjectionToken<IIntegrationMessageConsumer<T>>
 	) {
-		this._queueName = queueName;
 		this._settings = settings;
-		this._declareQueue = declareQueue;
-		this._exchangeName = exchangeName;
-		this._routingKey = routingKey;
-		this._handlerToken = handlerToken;
 	}
 
 	private delay(ms: number): Promise<void> {
@@ -78,21 +62,7 @@ export class RabbitMQConsumer<T extends IntegrationMessage> {
 			return;
 		}
 
-		if (this._exchangeName) {
-			console.log(`Declarando exchange: ${this._exchangeName}`);
-			await this._channel.assertExchange(this._exchangeName, 'topic', { durable: true });
-		}
-
-		if (this._declareQueue && this._exchangeName) {
-			console.log(`Declarando queue: ${this._queueName}`);
-			const queueResult = await this._channel.assertQueue(this._queueName, { durable: true });
-			console.log(`Enlazando queue ${this._queueName} al exchange ${this._exchangeName} con routingKey ${this._routingKey}`);
-			await this._channel.bindQueue(queueResult.queue, this._exchangeName, this._routingKey);
-		}
-
-		console.log(`[*] Esperando mensajes en ${this._queueName}`);
-
-		await this._channel.consume(this._queueName, async (msg: ConsumeMessage | null) => {
+		await this._channel.consume('', async (msg: ConsumeMessage | null) => {
 			if (!msg) {
 				return;
 			}
@@ -114,7 +84,7 @@ export class RabbitMQConsumer<T extends IntegrationMessage> {
 					this._channel.ack(msg);
 				}
 			} catch (error: unknown) {
-				console.error(`Error procesando mensaje en ${this._queueName}:`, error);
+				console.error('Error procesando mensaje', error);
 				this._channel.nack(msg, false, true);
 			}
 		}, { noAck: false });
@@ -129,10 +99,10 @@ export class RabbitMQConsumer<T extends IntegrationMessage> {
 		}
 	}
 
-	private deserializeMessage(body: Buffer): T | null {
+	private deserializeMessage(body: Buffer): any | null {
 		try {
 			const json = body.toString('utf-8');
-			return JSON.parse(json) as T;
+			return JSON.parse(json);
 		} catch (error) {
 			console.error('Error al deserializar mensaje:', error);
 			return null;
