@@ -38,7 +38,7 @@ async function startServer() {
 		'patient.created'
 	);
 
-	RabbitMQBusConfigurator.start();
+	//RabbitMQBusConfigurator.start();
 
 	app.use(cors());
 	app.use(morgan('dev'));
