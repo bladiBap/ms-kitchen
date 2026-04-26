@@ -25,10 +25,10 @@ export class DiscoveryService implements IDiscoveryService {
 				name: this.serviceName,
 				id: this.serviceId,
 				address: env.MS_KITCHEN_APP_HOST,
-				port: env.MS_KITCHEN_APP_PORT,
+				port: env.MS_KITCHEN_APP_PORT_EXTERNAL,
 				check: {
 					name: `Health Check for ${this.serviceId}`,
-					http: `http://${env.MS_KITCHEN_APP_HOST}:80/api/kitchen/health`,
+					http: `http://${env.MS_KITCHEN_APP_HOST}:${env.MS_KITCHEN_APP_PORT_EXTERNAL}/api/kitchen/health`,
 					interval: env.CONSUL_INTERVAL,
 					timeout: env.CONSUL_TIMEOUT,
 					deregistercriticalserviceafter: env.CONSUL_DEREGISTER_AFTER
